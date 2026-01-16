@@ -1,0 +1,460 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ==================== USER & AUTHENTICATION ====================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          String    @default("PARTICIPANT") // PARTICIPANT, MENTOR, JUDGE, ORGANIZER, SPONSOR
+  bio           String?
+  github        String?
+  gitlab        String?
+  linkedin      String?
+  website       String?
+  
+  // Skills & Profile
+  skills        String?   // JSON array of skills
+  experienceLevel String? // BEGINNER, INTERMEDIATE, ADVANCED
+  interests     String?   // JSON array of interests
+  availability  String?   // JSON for mentor/judge availability
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  sessions      Session[]
+  accounts      Account[]
+  teamMemberships TeamMember[]
+  ownedTeams    Team[]           @relation("TeamOwner")
+  eventRegistrations EventRegistration[]
+  submissions   Submission[]
+  scores        Score[]
+  mentorSessions MentorSession[] @relation("MentorSessions")
+  bookedSessions MentorSession[] @relation("BookedSessions")
+  notifications  Notification[]
+  tickets        Ticket[]
+  ticketResponses TicketResponse[]
+  checkIns       CheckIn[]
+  workshopRegistrations WorkshopRegistration[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ==================== EVENTS & HACKATHONS ====================
+
+model Event {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  rules       String?  // Markdown
+  prizes      String?  // JSON array
+  bannerImage String?
+  maxTeamSize Int      @default(4)
+  minTeamSize Int      @default(1)
+  
+  // Timeline
+  registrationStart DateTime
+  registrationEnd   DateTime
+  hackingStart      DateTime
+  hackingEnd        DateTime
+  judgingStart      DateTime
+  judgingEnd        DateTime
+  
+  status      String   @default("DRAFT") // DRAFT, REGISTRATION, HACKING, JUDGING, COMPLETED
+  isPublic    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  registrations EventRegistration[]
+  teams         Team[]
+  schedule      ScheduleItem[]
+  announcements Announcement[]
+  submissions   Submission[]
+  scoringRubric ScoringRubric[]
+  sponsors      EventSponsor[]
+  resources     Resource[]
+  workshops     Workshop[]
+}
+
+model ScheduleItem {
+  id          String   @id @default(cuid())
+  eventId     String
+  title       String
+  description String?
+  type        String   // REGISTRATION, TEAM_FORMATION, WORKSHOP, HACKING, SUBMISSION, JUDGING, CEREMONY
+  startTime   DateTime
+  endTime     DateTime
+  location    String?
+  isHighlight Boolean  @default(false)
+  
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model EventRegistration {
+  id        String   @id @default(cuid())
+  eventId   String
+  userId    String
+  status    String   @default("REGISTERED") // REGISTERED, CONFIRMED, CHECKED_IN, CANCELLED
+  createdAt DateTime @default(now())
+  
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([eventId, userId])
+}
+
+// ==================== TEAMS ====================
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  eventId     String
+  ownerId     String
+  description String?
+  lookingFor  String?  // Skills they're looking for
+  inviteCode  String   @unique @default(cuid())
+  isOpen      Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  owner       User     @relation("TeamOwner", fields: [ownerId], references: [id])
+  members     TeamMember[]
+  submissions Submission[]
+  workspace   Workspace?
+  mentorAssignments MentorSession[]
+  chatMessages ChatMessage[]
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  teamId    String
+  userId    String
+  role      String   @default("MEMBER") // OWNER, MEMBER
+  joinedAt  DateTime @default(now())
+  
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([teamId, userId])
+}
+
+// ==================== COLLABORATIVE WORKSPACE ====================
+
+model Workspace {
+  id        String   @id @default(cuid())
+  teamId    String   @unique
+  
+  // Y.js document states (stored as base64)
+  docContent    String?  // Tiptap document
+  canvasContent String?  // Excalidraw canvas
+  codeContent   String?  // Monaco editor
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  teamId    String
+  userId    String
+  content   String
+  type      String   @default("TEXT") // TEXT, FILE, SYSTEM
+  createdAt DateTime @default(now())
+  
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+// ==================== SUBMISSIONS ====================
+
+model Submission {
+  id          String   @id @default(cuid())
+  eventId     String
+  teamId      String
+  userId      String   // Who submitted
+  
+  name        String
+  description String?
+  
+  // Links
+  repoUrl     String?
+  demoUrl     String?
+  videoUrl    String?
+  pitchDeckUrl String?
+  
+  // Files
+  files       String?  // JSON array of file URLs
+  
+  version     Int      @default(1)
+  isLocked    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  team        Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  submitter   User     @relation(fields: [userId], references: [id])
+  scores      Score[]
+}
+
+// ==================== JUDGING & SCORING ====================
+
+model ScoringRubric {
+  id          String   @id @default(cuid())
+  eventId     String
+  name        String   // e.g., "Innovation", "Technical Complexity"
+  description String?
+  weight      Float    @default(1.0)
+  maxScore    Int      @default(10)
+  order       Int      @default(0)
+  
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  scores      Score[]
+}
+
+model Score {
+  id           String   @id @default(cuid())
+  submissionId String
+  rubricId     String
+  judgeId      String
+  score        Float
+  comment      String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  submission   Submission    @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  rubric       ScoringRubric @relation(fields: [rubricId], references: [id], onDelete: Cascade)
+  judge        User          @relation(fields: [judgeId], references: [id])
+  
+  @@unique([submissionId, rubricId, judgeId])
+}
+
+// ==================== MENTORS ====================
+
+model MentorSession {
+  id          String   @id @default(cuid())
+  mentorId    String
+  teamId      String?
+  bookerId    String?  // Who booked the session
+  
+  title       String?
+  notes       String?
+  feedback    String?
+  
+  startTime   DateTime
+  endTime     DateTime
+  status      String   @default("AVAILABLE") // AVAILABLE, BOOKED, COMPLETED, CANCELLED
+  meetingLink String?
+  
+  createdAt   DateTime @default(now())
+  
+  mentor      User     @relation("MentorSessions", fields: [mentorId], references: [id])
+  team        Team?    @relation(fields: [teamId], references: [id])
+  booker      User?    @relation("BookedSessions", fields: [bookerId], references: [id])
+}
+
+// ==================== SPONSORS ====================
+
+model Sponsor {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  logo        String?
+  website     String?
+  
+  createdAt   DateTime @default(now())
+  
+  events      EventSponsor[]
+}
+
+model EventSponsor {
+  id        String   @id @default(cuid())
+  eventId   String
+  sponsorId String
+  tier      String   @default("SILVER") // PLATINUM, GOLD, SILVER
+  prize     String?  // Associated prize
+  
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  sponsor   Sponsor  @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+  
+  @@unique([eventId, sponsorId])
+}
+
+// ==================== RESOURCES ====================
+
+model Resource {
+  id          String   @id @default(cuid())
+  eventId     String?
+  title       String
+  description String?
+  url         String
+  category    String   // API, DATASET, TUTORIAL, DOCS, TOOL
+  tags        String?  // JSON array
+  
+  createdAt   DateTime @default(now())
+  
+  event       Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+// ==================== WORKSHOPS ====================
+
+model Workshop {
+  id          String   @id @default(cuid())
+  eventId     String
+  title       String
+  description String?
+  speaker     String?
+  meetingLink String?
+  replayLink  String?
+  
+  startTime   DateTime
+  endTime     DateTime
+  
+  createdAt   DateTime @default(now())
+  
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  registrations WorkshopRegistration[]
+}
+
+model WorkshopRegistration {
+  id         String   @id @default(cuid())
+  workshopId String
+  userId     String
+  createdAt  DateTime @default(now())
+  
+  workshop   Workshop @relation(fields: [workshopId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([workshopId, userId])
+}
+
+// ==================== ANNOUNCEMENTS & NOTIFICATIONS ====================
+
+model Announcement {
+  id        String   @id @default(cuid())
+  eventId   String
+  title     String
+  content   String
+  target    String   @default("ALL") // ALL, PARTICIPANTS, MENTORS, JUDGES, SPECIFIC_TEAM
+  targetId  String?  // Team ID if target is SPECIFIC_TEAM
+  priority  String   @default("NORMAL") // LOW, NORMAL, HIGH, URGENT
+  
+  createdAt DateTime @default(now())
+  
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   // ANNOUNCEMENT, TEAM_INVITE, SUBMISSION, SCORE, SYSTEM
+  link      String?
+  isRead    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ==================== HELP DESK ====================
+
+model Ticket {
+  id          String   @id @default(cuid())
+  userId      String
+  category    String   // TECHNICAL, TEAM, GENERAL
+  subject     String
+  description String
+  status      String   @default("OPEN") // OPEN, IN_PROGRESS, RESOLVED, CLOSED
+  priority    String   @default("NORMAL") // LOW, NORMAL, HIGH, URGENT
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  user        User     @relation(fields: [userId], references: [id])
+  responses   TicketResponse[]
+}
+
+model TicketResponse {
+  id        String   @id @default(cuid())
+  ticketId  String
+  userId    String
+  content   String
+  isAdmin   Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+// ==================== CHECK-IN ====================
+
+model CheckIn {
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String?
+  qrCode    String?
+  method    String   @default("MANUAL") // QR, MANUAL
+  
+  createdAt DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id])
+}
