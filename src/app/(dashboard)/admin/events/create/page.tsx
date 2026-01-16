@@ -43,6 +43,7 @@ export default function CreateEventPage() {
     defaultValues: {
       maxTeamSize: 4,
       minTeamSize: 1,
+      // Initialize dates to avoid undefined issues if needed, though mostly handled by optional/required
     },
   });
 
@@ -171,6 +172,7 @@ function DatePicker({
           selected={date}
           onSelect={setDate}
           initialFocus
+          required
         />
       </PopoverContent>
     </Popover>
