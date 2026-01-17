@@ -86,7 +86,8 @@ export default function RegisterPage() {
         <div className="grid grid-cols-2 gap-6">
           <Button
             variant="outline"
-            onClick={() => handleSocialLogin("github")}
+            // onClick={() => handleSocialLogin("github")}
+            onClick={()=>router.push("/dashboard")}
             disabled={isLoading}
           >
             <Github className="mr-2 h-4 w-4" />

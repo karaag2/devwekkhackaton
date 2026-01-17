@@ -18,8 +18,8 @@ export function DashboardSidebar() {
   const user = useUserStore((state) => state.user);
 
   // Default to PARTICIPANT links if role not ready
-  const role = (user?.role as UserRole) || "PARTICIPANT";
-  const items = NAV_ITEMS[role] || NAV_ITEMS.PARTICIPANT;
+  const role = (user?.role as UserRole) || "ORGANIZER";
+  const items = NAV_ITEMS[role] || NAV_ITEMS.ORGANIZER;
 
   return (
     <>
@@ -54,7 +54,7 @@ export function DashboardSidebar() {
                     >
                       {item.label}
                     </MobileLink>
-                  )
+                  ),
               )}
             </div>
           </ScrollArea>
@@ -78,7 +78,7 @@ export function DashboardSidebar() {
                     "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary",
                     pathname === item.href
                       ? "bg-zinc-200 text-primary dark:bg-zinc-800"
-                      : "text-muted-foreground"
+                      : "text-muted-foreground",
                   )}
                 >
                   {item.label}

@@ -130,7 +130,10 @@ export default function CreateEventPage() {
               </div>
 
               <div className="flex justify-end">
-                <Button disabled={isLoading}>
+                <Button
+                  disabled={isLoading}
+                  onClick={() => console.log("event created")}
+                >
                   {isLoading && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
@@ -159,7 +162,7 @@ function DatePicker({
           variant={"outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !date && "text-muted-foreground",
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />

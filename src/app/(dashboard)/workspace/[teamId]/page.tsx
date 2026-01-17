@@ -19,47 +19,57 @@ export default function WorkspacePage() {
     <div className="flex flex-col h-[calc(100vh-4rem)] gap-4">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-           <h1 className="text-2xl font-bold tracking-tight">Team Workspace</h1>
-           <p className="text-sm text-muted-foreground">Collaborate with your team in real-time.</p>
+          <h1 className="text-2xl font-bold tracking-tight">Team Workspace</h1>
+          <p className="text-sm text-muted-foreground">
+            Collaborate with your team in real-time.
+          </p>
         </div>
         <div className="flex gap-2">
-            <Button variant="outline" size="sm">
-               <MessageSquare className="mr-2 h-4 w-4" />
-               Team Chat
-            </Button>
-            <Button size="sm">
-               <Monitor className="mr-2 h-4 w-4" />
-               Live Share
-            </Button>
+          <Button variant="outline" size="sm">
+            <MessageSquare className="mr-2 h-4 w-4" />
+            Team Chat
+          </Button>
+          <Button size="sm">
+            <Monitor className="mr-2 h-4 w-4" />
+            Live Share
+          </Button>
         </div>
       </div>
 
-      <Tabs defaultValue="docs" className="flex-1 flex flex-col" onValueChange={setActiveTab}>
+      <Tabs
+        defaultValue="docs"
+        className="flex-1 flex flex-col"
+        onValueChange={setActiveTab}
+      >
         <div className="flex items-center justify-between">
-            <TabsList>
-               <TabsTrigger value="docs">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Docs
-               </TabsTrigger>
-               <TabsTrigger value="whiteboard">
-                  <PenTool className="mr-2 h-4 w-4" />
-                  Whiteboard
-               </TabsTrigger>
-               <TabsTrigger value="code">
-                  <Code className="mr-2 h-4 w-4" />
-                  Code
-               </TabsTrigger>
-            </TabsList>
-         </div>
+          <TabsList>
+            <TabsTrigger value="docs">
+              <FileText className="mr-2 h-4 w-4" />
+              Docs
+            </TabsTrigger>
+            <TabsTrigger value="whiteboard">
+              <PenTool className="mr-2 h-4 w-4" />
+              Whiteboard
+            </TabsTrigger>
+            <TabsTrigger value="code">
+              <Code className="mr-2 h-4 w-4" />
+              Code
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-        <TabsContent value="docs" className="flex-1 mt-4 border rounded-md p-4 bg-background">
-          <TiptapEditor />
+        <TabsContent
+          value="docs"
+          className="flex-1 mt-4 border rounded-md p-4 bg-background"
+        >
+          {/* <TiptapEditor /> */}
+          DRAKEN
         </TabsContent>
-        
+
         <TabsContent value="whiteboard" className="flex-1 mt-4">
           <Whiteboard />
         </TabsContent>
-        
+
         <TabsContent value="code" className="flex-1 mt-4">
           <CodeEditor />
         </TabsContent>

@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { Loader2 } from "lucide-react";
-
+import "@excalidraw/excalidraw/index.css";
 // Dynamically import Excalidraw with SSR disabled
 const Excalidraw = dynamic(
   async () => (await import("@excalidraw/excalidraw")).Excalidraw,
@@ -13,7 +13,7 @@ const Excalidraw = dynamic(
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     ),
-  }
+  },
 );
 
 export function Whiteboard() {
