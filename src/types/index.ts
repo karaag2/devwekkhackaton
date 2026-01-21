@@ -84,7 +84,7 @@ export const NAV_ITEMS = {
     { label: "Workspace", href: "/workspace" },
     { label: "Submissions", href: "/submissions" },
     { label: "Leaderboard", href: "/leaderboard" },
-    { label: "Help", href: "/help" },
+    { label: "Help", href: "/support" },
   ],
   MENTOR: [
     { label: "Dashboard", href: "/mentor" },

@@ -28,8 +28,8 @@ export const useUserStore = create<UserState>()(
       setLoading: (isLoading) => set({ isLoading }),
       logout: () => set({ user: null }),
     }),
-    { name: "user-storage" }
-  )
+    { name: "user-storage" },
+  ),
 );
 
 // ==================== EVENT STORE ====================
@@ -109,7 +109,7 @@ export const useNotificationStore = create<NotificationState>()((set) => ({
   markAsRead: (id) =>
     set((state) => ({
       notifications: state.notifications.map((n) =>
-        n.id === id ? { ...n, isRead: true } : n
+        n.id === id ? { ...n, isRead: true } : n,
       ),
       unreadCount: Math.max(0, state.unreadCount - 1),
     })),
@@ -129,22 +129,54 @@ export const useNotificationStore = create<NotificationState>()((set) => ({
 
 interface UIState {
   sidebarOpen: boolean;
+  workspaceFullScreen: boolean;
   theme: "light" | "dark" | "system";
+  visualStyle:
+    | "minimal"
+    | "cyber"
+    | "playful"
+    | "elegant"
+    | "midnight"
+    | "nature"
+    | "sunset"
+    | "mono"
+    | "glass";
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
+  toggleWorkspaceFullScreen: () => void;
+  setWorkspaceFullScreen: (full: boolean) => void;
   setTheme: (theme: "light" | "dark" | "system") => void;
+  setVisualStyle: (
+    style:
+      | "minimal"
+      | "cyber"
+      | "playful"
+      | "elegant"
+      | "midnight"
+      | "nature"
+      | "sunset"
+      | "mono"
+      | "glass",
+  ) => void;
 }
 
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
       sidebarOpen: true,
+      workspaceFullScreen: false,
       theme: "system",
+      visualStyle: "minimal",
       toggleSidebar: () =>
         set((state) => ({ sidebarOpen: !state.sidebarOpen })),
       setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
+      toggleWorkspaceFullScreen: () =>
+        set((state) => ({ workspaceFullScreen: !state.workspaceFullScreen })),
+      setWorkspaceFullScreen: (workspaceFullScreen) =>
+        set({ workspaceFullScreen }),
       setTheme: (theme) => set({ theme }),
+      setVisualStyle: (visualStyle) => set({ visualStyle }),
     }),
-    { name: "ui-storage" }
-  )
+    { name: "ui-storage" },
+  ),
 );

@@ -30,7 +30,7 @@ export function UserNav() {
         email: session.user.email,
         name: session.user.name,
         image: session.user.image || null,
-        role: "PARTICIPANT", // Default fallback, should come from session
+        role: (session.user as any).role || "PARTICIPANT",
       });
     }
   }, [session, setUser]);
@@ -57,7 +57,11 @@ export function UserNav() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
+      <DropdownMenuContent
+        className="w-56 bg-background border-border shadow-2xl rounded-2xl p-2"
+        align="end"
+        forceMount
+      >
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">

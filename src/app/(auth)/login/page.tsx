@@ -5,21 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Github } from "lucide-react";
+import { Loader2, Github, Gitlab } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { signIn } from "@/lib/auth-client";
 
@@ -46,127 +38,165 @@ export default function LoginPage() {
         },
         {
           onError: (ctx) => {
-            toast.error(ctx.error.message || "Failed to sign in");
+            toast.error(ctx.error.message || "Échec de la connexion");
           },
           onSuccess: () => {
-            toast.success("Signed in successfully");
+            toast.success("Connexion réussie");
             router.push("/dashboard");
           },
-        }
+        },
       );
     } catch {
-      // Handled by onError callback usually, but catch generic errors
-      toast.error("An unexpected error occurred");
+      toast.error("Une erreur inattendue est survenue");
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function handleSocialLogin(provider: "github" | "gitlab") {
+  async function handleSocialLogin(provider: "github" | "gitlab" | "google") {
     setIsLoading(true);
     try {
       await signIn.social({
-        provider,
+        provider: provider === "google" ? "google" : provider,
         callbackURL: "/dashboard",
       });
     } catch {
-      toast.error(`Failed to sign in with ${provider}`);
+      toast.error(`Échec de la connexion avec ${provider}`);
       setIsLoading(false);
     }
   }
 
   return (
-    <Card className="w-full">
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-        <CardDescription>
-          Enter your email to sign in to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4">
-        <div className="grid grid-cols-2 gap-6">
-          <Button
-            variant="outline"
-            onClick={() => handleSocialLogin("github")}
-            disabled={isLoading}
-          >
-            <Github className="mr-2 h-4 w-4" />
-            Github
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => handleSocialLogin("gitlab")}
-            disabled={isLoading}
-          >
-            GitLab
-          </Button>
-        </div>
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-2">
-            <div className="grid gap-1">
-              <Label htmlFor="email">Email</Label>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <div className="space-y-2 text-left">
+        <h1 className="text-4xl font-black tracking-tight text-foreground transition-colors">
+          Bon retour
+        </h1>
+        <p className="text-lg font-medium text-muted-foreground">
+          Saisissez vos identifiants pour accéder à la grille.
+        </p>
+      </div>
+
+      <div className="grid gap-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div className="space-y-4">
+            <div className="space-y-2 text-left">
+              <Label
+                htmlFor="email"
+                className="text-sm font-bold text-foreground"
+              >
+                Adresse E-mail
+              </Label>
               <Input
                 id="email"
-                placeholder="name@example.com"
+                placeholder="nom@exemple.com"
                 type="email"
-                autoCapitalize="none"
-                autoComplete="email"
-                autoCorrect="off"
+                className="h-12 rounded-xl border-border bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
                 disabled={isLoading}
                 {...register("email")}
               />
               {errors.email && (
-                <p className="text-sm text-red-500">{errors.email.message}</p>
+                <p className="text-xs font-medium text-destructive">
+                  {errors.email.message}
+                </p>
               )}
             </div>
-            <div className="grid gap-1">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-2 text-left">
+              <div className="flex items-center justify-between">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-bold text-foreground"
+                >
+                  Mot de passe
+                </Label>
+                <Link
+                  href="/forgot-password"
+                  className="text-sm font-bold text-primary hover:underline"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
               <Input
                 id="password"
                 type="password"
+                className="h-12 rounded-xl border-border bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
                 disabled={isLoading}
                 {...register("password")}
               />
               {errors.password && (
-                <p className="text-sm text-red-500">
+                <p className="text-xs font-medium text-destructive">
                   {errors.password.message}
                 </p>
               )}
             </div>
-            <Button className="mt-2" disabled={isLoading}>
-              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In
+          </div>
+
+          <Button
+            type="submit"
+            className="h-14 w-full rounded-xl bg-primary font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-xl active:scale-[0.98] uppercase tracking-widest text-xs"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              "Se connecter"
+            )}
+          </Button>
+        </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-4 text-muted-foreground font-medium">
+              Ou continuer avec
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          <Button
+            variant="outline"
+            className="h-12 rounded-xl border-border font-bold text-foreground transition-all hover:bg-muted hover:border-muted-foreground/30 bg-background"
+            onClick={() => handleSocialLogin("google")}
+            disabled={isLoading}
+          >
+            <FcGoogle className="mr-2 h-5 w-5" />
+            Google
+          </Button>
+          <div className="grid grid-cols-2 gap-4">
+            <Button
+              variant="outline"
+              className="h-12 rounded-xl border-border font-bold text-foreground transition-all hover:bg-muted bg-background"
+              onClick={() => handleSocialLogin("github")}
+              disabled={isLoading}
+            >
+              <Github className="mr-2 h-4 w-4" />
+              Github
+            </Button>
+            <Button
+              variant="outline"
+              className="h-12 rounded-xl border-border font-bold text-foreground transition-all hover:bg-muted bg-background"
+              onClick={() => handleSocialLogin("gitlab")}
+              disabled={isLoading}
+            >
+              <Gitlab className="mr-2 h-4 w-4" />
+              GitLab
             </Button>
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex flex-col gap-2">
-        <div className="text-sm text-muted-foreground text-center">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/register"
-            className="text-primary underline-offset-4 hover:underline"
-          >
-            Sign up
-          </Link>
         </div>
+      </div>
+
+      <div className="text-center text-sm font-medium text-muted-foreground font-bold">
+        Pas encore membre ?{" "}
         <Link
-          href="/forgot-password"
-          className="text-sm text-center text-muted-foreground hover:text-primary underline-offset-4 hover:underline"
+          href="/register"
+          className="font-black text-primary hover:underline"
         >
-          Forgot your password?
+          Créer un compte
         </Link>
-      </CardFooter>
-    </Card>
+      </div>
+    </div>
   );
 }

@@ -1,5 +1,8 @@
 import { DashboardSidebar } from "@/components/dashboard-sidebar";
+import { SidebarToggle } from "@/components/sidebar-toggle";
 import { UserNav } from "@/components/user-nav";
+import { FullScreenSync } from "@/components/full-screen-sync";
+import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({
   children,
@@ -7,15 +10,19 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40 md:flex-row">
-      <DashboardSidebar />
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14 md:pl-0 w-full">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+    <div className="flex min-h-screen w-full flex-col bg-background md:flex-row transition-colors duration-500">
+      <FullScreenSync />
+      <div className="hide-in-full-screen">
+        <DashboardSidebar />
+      </div>
+      <div className="flex flex-col w-full">
+        <header className="hide-in-full-screen sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background px-6 backdrop-blur-md">
+          <SidebarToggle />
           <div className="ml-auto flex items-center gap-2">
             <UserNav />
           </div>
         </header>
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
+        <main className="flex-1 p-6 md:p-8 no-padding-in-full-screen overflow-auto">
           {children}
         </main>
       </div>

@@ -8,6 +8,7 @@ import { Bold, Italic, List, ListOrdered, Heading2 } from "lucide-react";
 export function TiptapEditor() {
   const editor = useEditor({
     extensions: [StarterKit],
+    immediatelyRender: false,
     content: "<p>Start collaborating with your team here...</p>",
     editorProps: {
       attributes: {
