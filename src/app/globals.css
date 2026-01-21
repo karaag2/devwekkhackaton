@@ -53,6 +53,7 @@
 }
 
 /* Base Styles */
+[data-style="minimal"],
 :root {
   --radius: 1rem;
   --background: #ffffff;

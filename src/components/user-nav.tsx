@@ -37,7 +37,7 @@ export function UserNav() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/login");
+    router.replace("/login");
   };
 
   if (!session) return null;

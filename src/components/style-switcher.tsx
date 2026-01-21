@@ -56,10 +56,10 @@ export function StyleSwitcher() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-56 p-2 rounded-2xl shadow-2xl border-gray-100 bg-white/95 backdrop-blur-md"
+          className="w-56 p-2 rounded-2xl shadow-2xl border-border bg-background/95 backdrop-blur-md"
         >
           <div className="px-2 py-2 mb-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
               Atmosphere Switcher
             </p>
           </div>
