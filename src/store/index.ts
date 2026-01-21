@@ -140,7 +140,12 @@ interface UIState {
     | "nature"
     | "sunset"
     | "mono"
-    | "glass";
+    | "glass"
+    | "synthwave"
+    | "blueprint"
+    | "royal"
+    | "matrix"
+    | "brutalist";
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
   toggleWorkspaceFullScreen: () => void;
@@ -156,7 +161,12 @@ interface UIState {
       | "nature"
       | "sunset"
       | "mono"
-      | "glass",
+      | "glass"
+      | "synthwave"
+      | "blueprint"
+      | "royal"
+      | "matrix"
+      | "brutalist",
   ) => void;
 }
 

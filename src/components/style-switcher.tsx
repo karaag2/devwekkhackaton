@@ -6,7 +6,6 @@ import {
   Palette,
   Monitor,
   Gamepad2,
-  Gamepad,
   Crown,
   Check,
   Moon,
@@ -15,6 +14,12 @@ import {
   Layout,
   GlassWater,
   Sparkles,
+  Waves,
+  Ruler,
+  Gem,
+  Terminal,
+  Shapes,
+  Gamepad,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -34,6 +39,11 @@ const styles = [
   { id: "sunset", name: "Sunset", icon: Sun, color: "bg-orange-600" },
   { id: "mono", name: "Mono", icon: Layout, color: "bg-black" },
   { id: "glass", name: "Glass", icon: GlassWater, color: "bg-sky-400" },
+  { id: "synthwave", name: "Synthwave", icon: Waves, color: "bg-fuchsia-600" },
+  { id: "blueprint", name: "Blueprint", icon: Ruler, color: "bg-blue-800" },
+  { id: "royal", name: "Royal", icon: Gem, color: "bg-zinc-900" },
+  { id: "matrix", name: "Matrix", icon: Terminal, color: "bg-green-900" },
+  { id: "brutalist", name: "Brutalist", icon: Shapes, color: "bg-yellow-400" },
 ] as const;
 
 export function StyleSwitcher() {
@@ -41,6 +51,7 @@ export function StyleSwitcher() {
 
   useEffect(() => {
     document.documentElement.setAttribute("data-style", visualStyle);
+    document.body.setAttribute("data-style", visualStyle);
   }, [visualStyle]);
 
   return (
@@ -56,34 +67,36 @@ export function StyleSwitcher() {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-56 p-2 rounded-2xl shadow-2xl border-border bg-background/95 backdrop-blur-md"
+          className="w-64 p-2 rounded-2xl shadow-2xl border-border bg-background/95 backdrop-blur-md"
         >
-          <div className="px-2 py-2 mb-1">
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
-              Atmosphere Switcher
+          <div className="px-2 py-2 mb-1 border-b border-border/50">
+            <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground italic">
+              Atmosphere Engine v2.0
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-1 max-h-[400px] overflow-y-auto pr-1">
+          <div className="grid grid-cols-1 gap-1 max-h-[450px] overflow-y-auto pr-1 mt-1">
             {styles.map((style) => (
               <DropdownMenuItem
                 key={style.id}
-                className="flex items-center justify-between py-2.5 px-3 rounded-xl cursor-pointer focus:bg-gray-50 group transition-colors"
+                className="flex items-center justify-between py-2 px-3 rounded-xl cursor-pointer focus:bg-muted group transition-all"
                 onClick={() => setVisualStyle(style.id as any)}
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className={`h-8 w-8 rounded-lg ${style.color} flex items-center justify-center text-white shadow-sm`}
+                    className={`h-8 w-8 rounded-lg ${style.color} flex items-center justify-center text-white shadow-sm group-hover:scale-110 transition-transform`}
                   >
                     <style.icon className="h-4 w-4" />
                   </div>
-                  <span
-                    className={`text-sm font-bold ${visualStyle === style.id ? "text-blue-600" : "text-gray-600"}`}
-                  >
-                    {style.name}
-                  </span>
+                  <div className="flex flex-col">
+                    <span
+                      className={`text-[13px] font-black uppercase tracking-tight ${visualStyle === style.id ? "text-primary" : "text-foreground/70"}`}
+                    >
+                      {style.name}
+                    </span>
+                  </div>
                 </div>
                 {visualStyle === style.id && (
-                  <Check className="h-4 w-4 text-blue-600" />
+                  <Check className="h-4 w-4 text-primary animate-in zoom-in" />
                 )}
               </DropdownMenuItem>
             ))}
