@@ -1,0 +1,159 @@
+{
+  "landing": {
+    "nav": {
+      "event": "Evento",
+      "path": "Caminos",
+      "prizes": "Premios",
+      "faq": "FAQ"
+    },
+    "hero": {
+      "badge": "Ya Abierto",
+      "title": "Tu futuro",
+      "titleAccent": "comienza aquí.",
+      "subtitle": "El mayor hackathon estudiantil para superar los límites de la IA,la seguridad y el desarrollo moderno para impactar en la comunidad.",
+      "ctaPrimary": "Únete a la batalla",
+      "ctaSecondary": "El Programa",
+      "prizePool": "Bolsa de premios",
+      "liveRegistration": "Registro en vivo"
+    },
+    "stats": {
+      "participants": "Participantes",
+      "projects": "Proyectos",
+      "prizes": "Premios totales",
+      "experts": "Expertos",
+      "nonstop": "Sin parar"
+    },
+    "tracks": {
+      "badge": "Expertise Tracks",
+      "title": "Forja tu",
+      "titleItalic": "propio camino.",
+      "subtitle": "Selecciona un camino especializado. Desafía el status quo tecnológico con soluciones audaces.",
+      "ai": {
+        "title": "Inteligencia Agéntica",
+        "desc": "Desarrolla sistemas autónomos de nueva generación."
+      },
+      "sec": {
+        "title": "Seguridad Ofensiva",
+        "desc": "Pon a prueba los límites y protege los datos críticos."
+      },
+      "ux": {
+        "title": "Experiencia de Interfaz",
+        "desc": "Reinventa la forma en que interactuamos con el código."
+      },
+      "explore": "Explorar"
+    },
+    "cta": {
+      "title": "¿Listo para",
+      "titleAccent": "crear?",
+      "button": "Reclama tu lugar",
+      "limited": "Plazas limitadas. Registro abierto."
+    },
+    "footer": {
+      "description": "La plataforma de innovación definitiva para los constructores del mañana.",
+      "navigation": "Navegación",
+      "legal": "Legal",
+      "privacy": "Privacidad",
+      "terms": "Condiciones",
+      "rights": "© 2026 DEVWEEK. TODOS LOS DERECHOS RESERVADOS.",
+      "madeBy": "Hecho con ❤️ por"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar Sesión",
+      "subtitle": "¡Bienvenido de nuevo!",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "signIn": "Entrar",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Registrarse",
+      "social": "O continuar con"
+    },
+    "register": {
+      "title": "Unirse a DevWeek 2026",
+      "subtitle": "Hazte constructor del futuro.",
+      "name": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "confirm": "Confirmar",
+      "phone": "Teléfono",
+      "city": "Ciudad",
+      "country": "País",
+      "status": "Estado",
+      "schoolOrCompany": "Escuela / Empresa",
+      "role": "Rol Principal",
+      "level": "Nivel de Experiencia",
+      "skills": "Habilidades (separadas por comas)",
+      "trackInterest": "Interés en la Pista",
+      "tshirtSize": "Talla Camiseta",
+      "dietary": "Restricciones Alimentarias",
+      "bio": "Biografía Corta",
+      "motivation": "Motivación y Proyecto",
+      "signUp": "Crear Cuenta",
+      "hasAccount": "¿Ya estás registrado?",
+      "signIn": "Iniciar Sesión",
+      "hasTeam": "Ya tengo un equipo (Código requerido luego)",
+      "agreeToRules": "Acepto el Código de Conducta"
+    },
+    "enrollment": {
+      "title": "Únete a la Batalla",
+      "subtitle": "Regístrate para hacer historia.",
+      "step1": "Identidad",
+      "step2": "Perfil Tech",
+      "step3": "Preferencias",
+      "step4": "Validación"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "workspace": "Espacio de trabajo",
+      "teams": "Mi Equipo",
+      "schedule": "Horario",
+      "resources": "Recursos",
+      "settings": "Ajustes",
+      "home": "Inicio",
+      "events": "Eventos",
+      "dashboard": "Panel",
+      "submissions": "Envíos",
+      "leaderboard": "Clasificación",
+      "help": "Ayuda",
+      "admin": "Admin",
+      "users": "Usuarios",
+      "announcements": "Anuncios",
+      "tickets": "Tickets",
+      "showcase": "Vitrina"
+    },
+    "sidebar": {
+      "collapse": "Contraer barra",
+      "expand": "Expandir barra"
+    },
+    "home": {
+      "welcome": "Bienvenido de nuevo,",
+      "overview": "Todo luce genial hoy. Aquí tienes un resumen de tu estado.",
+      "stats": {
+        "upcoming": "Próximos eventos",
+        "new": "+1 nuevo",
+        "pending": "Pendiente",
+        "locked": "Bloqueado",
+        "noTeam": "Sin equipo"
+      }
+    },
+    "events": {
+      "title": "Hackathons",
+      "create": "Crear Evento",
+      "viewDetails": "Ver Detalles",
+      "online": "En línea"
+    },
+    "userNav": {
+      "profile": "Perfil",
+      "settings": "Ajustes",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "common": {
+    "loading": "Cargando...",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "finish": "Lanzar Ataque"
+  }
+}

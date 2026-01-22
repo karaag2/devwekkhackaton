@@ -12,41 +12,38 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerSchema, type RegisterInput } from "@/lib/validations";
-import { signUp, signIn } from "@/lib/auth-client";
-import { useUIStore } from "@/store";
-import { translations } from "@/lib/translations";
+import { loginSchema, type LoginInput } from "@/lib/validations";
+import { signIn } from "@/lib/auth-client";
+import { useTranslation } from "react-i18next";
 
-export default function RegisterPage() {
+export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { language } = useUIStore();
-  const t = translations[language].auth.register;
+  const { t } = useTranslation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterInput>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
   });
 
-  async function onSubmit(data: RegisterInput) {
+  async function onSubmit(data: LoginInput) {
     setIsLoading(true);
     try {
-      await signUp.email(
+      await signIn.email(
         {
           email: data.email,
           password: data.password,
-          name: data.name,
           callbackURL: "/dashboard",
         },
         {
           onError: (ctx) => {
-            toast.error(ctx.error.message || "Registration failed.");
+            toast.error(ctx.error.message || "Error");
           },
           onSuccess: () => {
-            toast.success("Account created successfully!");
+            toast.success("Welcome back!");
             router.push("/dashboard");
           },
         },
@@ -66,7 +63,7 @@ export default function RegisterPage() {
         callbackURL: "/dashboard",
       });
     } catch {
-      toast.error(`Registration failed with ${provider}`);
+      toast.error(`Login failed with ${provider}`);
       setIsLoading(false);
     }
   }
@@ -75,43 +72,22 @@ export default function RegisterPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-2 text-left">
         <h1 className="text-4xl font-black tracking-tight text-foreground transition-colors uppercase">
-          {t.title}
+          {t("auth.login.title")}
         </h1>
         <p className="text-lg font-medium text-muted-foreground italic">
-          {t.subtitle}
+          {t("auth.login.subtitle")}
         </p>
       </div>
 
       <div className="grid gap-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            <div className="space-y-2 text-left">
-              <Label
-                htmlFor="name"
-                className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
-              >
-                {t.name}
-              </Label>
-              <Input
-                id="name"
-                placeholder="John Doe"
-                type="text"
-                className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
-                disabled={isLoading}
-                {...register("name")}
-              />
-              {errors.name && (
-                <p className="text-xs font-bold text-destructive ml-1">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
             <div className="space-y-2 text-left">
               <Label
                 htmlFor="email"
                 className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
               >
-                {t.email}
+                {t("auth.login.email")}
               </Label>
               <Input
                 id="email"
@@ -127,45 +103,29 @@ export default function RegisterPage() {
                 </p>
               )}
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2 text-left">
+            <div className="space-y-2 text-left">
+              <div className="flex items-center justify-between">
                 <Label
                   htmlFor="password"
                   className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
                 >
-                  {t.password}
+                  {t("auth.login.password")}
                 </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
-                  placeholder="••••••••"
-                  disabled={isLoading}
-                  {...register("password")}
-                />
               </div>
-              <div className="space-y-2 text-left">
-                <Label
-                  htmlFor="confirmPassword"
-                  className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
-                >
-                  {t.confirm}
-                </Label>
-                <Input
-                  id="confirmPassword"
-                  type="password"
-                  className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
-                  placeholder="••••••••"
-                  disabled={isLoading}
-                  {...register("confirmPassword")}
-                />
-              </div>
+              <Input
+                id="password"
+                type="password"
+                className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
+                placeholder="••••••••"
+                disabled={isLoading}
+                {...register("password")}
+              />
+              {errors.password && (
+                <p className="text-xs font-bold text-destructive ml-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
-            {(errors.password || errors.confirmPassword) && (
-              <p className="text-xs font-bold text-destructive ml-1">
-                {errors.password?.message || errors.confirmPassword?.message}
-              </p>
-            )}
           </div>
 
           <Button
@@ -176,7 +136,7 @@ export default function RegisterPage() {
             {isLoading ? (
               <Loader2 className="h-6 w-6 animate-spin" />
             ) : (
-              t.signUp
+              t("auth.login.signIn")
             )}
           </Button>
         </form>
@@ -187,11 +147,7 @@ export default function RegisterPage() {
           </div>
           <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest">
             <span className="bg-background px-4 text-muted-foreground/50">
-              {language === "fr"
-                ? "Ou s'inscrire avec"
-                : language === "es"
-                  ? "O registrarse con"
-                  : "Or register with"}
+              {t("auth.login.social")}
             </span>
           </div>
         </div>
@@ -230,12 +186,12 @@ export default function RegisterPage() {
       </div>
 
       <div className="text-center text-xs font-black text-muted-foreground uppercase tracking-widest">
-        {t.hasAccount}{" "}
+        {t("auth.login.noAccount")}{" "}
         <Link
-          href="/login"
+          href="/register"
           className="text-primary hover:underline decoration-2 underline-offset-4"
         >
-          {t.signIn}
+          {t("auth.login.signUp")}
         </Link>
       </div>
     </div>

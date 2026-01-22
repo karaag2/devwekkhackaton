@@ -17,11 +17,13 @@ import { signOut } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSession } from "@/lib/auth-client";
+import { useTranslation } from "react-i18next";
 
 export function UserNav() {
   const router = useRouter();
   const { data: session } = useSession();
   const setUser = useUserStore((state) => state.setUser);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (session?.user) {
@@ -75,17 +77,17 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => router.push("/profile")}>
-            Profile
+            {t("dashboard.userNav.profile")}
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push("/settings")}>
-            Settings
+            {t("dashboard.userNav.settings")}
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
-          Log out
+          {t("dashboard.userNav.logout")}
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>

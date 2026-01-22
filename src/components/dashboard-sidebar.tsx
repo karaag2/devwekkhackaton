@@ -8,14 +8,40 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { NAV_ITEMS, type UserRole } from "@/types";
-import { useUserStore, useUIStore } from "@/store";
 import { useState } from "react";
+import { useUserStore, useUIStore } from "@/store";
+import { useTranslation } from "react-i18next";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const user = useUserStore((state) => state.user);
   const { sidebarOpen } = useUIStore();
+  const { t } = useTranslation();
+
+  const translateLabel = (label: string) => {
+    const map: Record<string, string> = {
+      Home: t("dashboard.nav.home"),
+      Events: t("dashboard.nav.events"),
+      Resources: t("dashboard.nav.resources"),
+      Dashboard: t("dashboard.nav.dashboard"),
+      "My Team": t("dashboard.nav.teams"),
+      Workspace: t("dashboard.nav.workspace"),
+      Submissions: t("dashboard.nav.submissions"),
+      Leaderboard: t("dashboard.nav.leaderboard"),
+      Help: t("dashboard.nav.help"),
+      Admin: t("dashboard.nav.admin"),
+      Users: t("dashboard.nav.users"),
+      Announcements: t("dashboard.nav.announcements"),
+      Tickets: t("dashboard.nav.tickets"),
+      Showcase: t("dashboard.nav.showcase"),
+      Teams: t("dashboard.nav.teams"),
+      Projects: t("dashboard.nav.workspace"),
+      Scores: t("dashboard.nav.leaderboard"),
+      Sessions: t("dashboard.nav.schedule"),
+    };
+    return map[label] || label;
+  };
 
   const role = (user?.role as UserRole) || "PARTICIPANT";
   const items = NAV_ITEMS[role] || NAV_ITEMS.PARTICIPANT;
@@ -60,7 +86,7 @@ export function DashboardSidebar() {
                           : "text-muted-foreground",
                       )}
                     >
-                      {item.label}
+                      {translateLabel(item.label)}
                     </MobileLink>
                   ),
               )}
@@ -109,7 +135,7 @@ export function DashboardSidebar() {
                         : "text-muted-foreground hover:text-primary hover:bg-muted",
                     )}
                   >
-                    {item.label}
+                    {translateLabel(item.label)}
                   </Link>
                 ))}
               </nav>

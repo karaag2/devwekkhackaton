@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { StyleProvider } from "@/components/style-provider";
+import { FloatingLanguageSwitcher } from "@/components/floating-language-switcher";
 
 export default function RootLayout({
   children,
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <StyleProvider>{children}</StyleProvider>
+        <StyleProvider>
+          {children}
+          <FloatingLanguageSwitcher />
+        </StyleProvider>
       </body>
     </html>
   );

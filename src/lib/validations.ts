@@ -143,31 +143,73 @@ export type ResourceInput = z.infer<typeof resourceSchema>;
 export type WorkshopInput = z.infer<typeof workshopSchema>;
 export type AnnouncementInput = z.infer<typeof announcementSchema>;
 
+const statusEnum = ["STUDENT", "PROFESSIONAL", "OTHER"] as const;
+const roleEnum = [
+  "FRONTEND",
+  "BACKEND",
+  "FULLSTACK",
+  "MOBILE",
+  "AI",
+  "DATA",
+  "DESIGN",
+  "PM",
+  "OTHER",
+] as const;
+const levelEnum = ["BEGINNER", "INTERMEDIATE", "ADVANCED", "EXPERT"] as const;
+const trackEnum = ["AI", "SECURITY", "INTERFACE", "GENERAL"] as const;
+const sizeEnum = ["XS", "S", "M", "L", "XL", "XXL"] as const;
+
 export const hackathonInscriptionSchema = z
   .object({
-    // Step 1: Account
-    name: z.string().min(2, "Le nom est requis"),
-    email: z.string().email("Email invalide"),
-    password: z.string().min(8, "8 caractères minimum"),
+    // Step 1: Identity & Account
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
     confirmPassword: z.string(),
-    // Step 2: Tech
-    role: z.enum([
-      "FRONTEND",
-      "BACKEND",
-      "FULLSTACK",
-      "MOBILE",
-      "AI",
-      "DESIGN",
-    ]),
-    level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
-    github: z.string().url("URL GitHub invalide").optional().or(z.literal("")),
-    // Step 3: Motivation
-    motivation: z.string().min(20, "Dites-nous en un peu plus (20 car. min)"),
+    phone: z
+      .string()
+      .min(8, "Phone number is too short")
+      .optional()
+      .or(z.literal("")),
+    city: z.string().min(2, "City is required"),
+    country: z.string().min(2, "Country is required"),
+
+    // Step 2: Professional Profile
+    status: z.enum(statusEnum),
+    schoolOrCompany: z
+      .string()
+      .min(2, "Educational or company info is required"),
+    role: z.enum(roleEnum),
+    level: z.enum(levelEnum),
+    github: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+    linkedin: z
+      .string()
+      .url("Must be a valid URL")
+      .optional()
+      .or(z.literal("")),
+    portfolio: z
+      .string()
+      .url("Must be a valid URL")
+      .optional()
+      .or(z.literal("")),
+    skills: z.string().optional(),
+    bio: z.string().max(500, "Bio is too long").optional(),
+
+    // Step 3: Hackathon Preferences
+    trackInterest: z.enum(trackEnum),
+    tshirtSize: z.enum(sizeEnum),
+    dietaryRestrictions: z.string().optional(),
+
+    // Step 4: Motivation & Team
+    motivation: z.string().min(20, "Motivation must be at least 20 characters"),
     hasTeam: z.boolean().default(false),
     teamName: z.string().optional(),
+    agreeToRules: z.boolean().refine((val) => val === true, {
+      message: "Acceptance is required",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Les mots de passe ne correspondent pas",
+    message: "Passwords don't match",
     path: ["confirmPassword"],
   });
 

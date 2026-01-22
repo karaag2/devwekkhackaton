@@ -12,22 +12,24 @@ import {
 } from "@/components/ui/card";
 import { Plus, Calendar, MapPin } from "lucide-react";
 import { useUserStore } from "@/store";
+import { useTranslation } from "react-i18next";
 
 export default function EventsPage() {
   const user = useUserStore((state) => state.user);
   const isAdmin = user?.role === "ORGANIZER";
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-black text-gray-900 tracking-tight underline decoration-indigo-600/20 decoration-4 underline-offset-8">
-          Hackathons
+          {t("dashboard.events.title")}
         </h1>
         {isAdmin && (
           <Link href="/admin/events/create">
             <Button className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full px-6 font-black uppercase tracking-widest text-[10px] h-10 shadow-lg shadow-indigo-100">
               <Plus className="mr-2 h-3.5 w-3.5" />
-              Create Event
+              {t("dashboard.events.create")}
             </Button>
           </Link>
         )}
@@ -50,13 +52,13 @@ export default function EventsPage() {
             </div>
             <div className="flex items-center text-sm font-bold text-gray-400 uppercase tracking-widest">
               <MapPin className="mr-2 h-4 w-4 text-indigo-400" />
-              Online
+              {t("dashboard.events.online")}
             </div>
           </CardContent>
           <CardFooter className="p-8 pt-6">
             <Link href="/events/global-ai-hackathon-2026" className="w-full">
               <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl h-12 font-black uppercase tracking-widest text-[10px] shadow-lg shadow-indigo-100">
-                View Details
+                {t("dashboard.events.viewDetails")}
               </Button>
             </Link>
           </CardFooter>

@@ -12,40 +12,39 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { loginSchema, type LoginInput } from "@/lib/validations";
-import { signIn } from "@/lib/auth-client";
-import { useUIStore } from "@/store";
-import { translations } from "@/lib/translations";
+import { registerSchema, type RegisterInput } from "@/lib/validations";
+import { signUp, signIn } from "@/lib/auth-client";
+import { useTranslation } from "react-i18next";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { language } = useUIStore();
-  const t = translations[language].auth.login;
+  const { t } = useTranslation();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
   });
 
-  async function onSubmit(data: LoginInput) {
+  async function onSubmit(data: RegisterInput) {
     setIsLoading(true);
     try {
-      await signIn.email(
+      await signUp.email(
         {
           email: data.email,
           password: data.password,
+          name: data.name,
           callbackURL: "/dashboard",
         },
         {
           onError: (ctx) => {
-            toast.error(ctx.error.message || "Error");
+            toast.error(ctx.error.message || "Registration failed.");
           },
           onSuccess: () => {
-            toast.success("Welcome back!");
+            toast.success("Account created successfully!");
             router.push("/dashboard");
           },
         },
@@ -65,7 +64,7 @@ export default function LoginPage() {
         callbackURL: "/dashboard",
       });
     } catch {
-      toast.error(`Login failed with ${provider}`);
+      toast.error(`Registration failed with ${provider}`);
       setIsLoading(false);
     }
   }
@@ -74,22 +73,43 @@ export default function LoginPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-2 text-left">
         <h1 className="text-4xl font-black tracking-tight text-foreground transition-colors uppercase">
-          {t.title}
+          {t("auth.register.title")}
         </h1>
         <p className="text-lg font-medium text-muted-foreground italic">
-          {t.subtitle}
+          {t("auth.register.subtitle")}
         </p>
       </div>
 
       <div className="grid gap-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-4">
+            <div className="space-y-2 text-left">
+              <Label
+                htmlFor="name"
+                className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
+              >
+                {t("auth.register.name")}
+              </Label>
+              <Input
+                id="name"
+                placeholder="John Doe"
+                type="text"
+                className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
+                disabled={isLoading}
+                {...register("name")}
+              />
+              {errors.name && (
+                <p className="text-xs font-bold text-destructive ml-1">
+                  {errors.name.message}
+                </p>
+              )}
+            </div>
             <div className="space-y-2 text-left">
               <Label
                 htmlFor="email"
                 className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
               >
-                {t.email}
+                {t("auth.register.email")}
               </Label>
               <Input
                 id="email"
@@ -105,29 +125,45 @@ export default function LoginPage() {
                 </p>
               )}
             </div>
-            <div className="space-y-2 text-left">
-              <div className="flex items-center justify-between">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2 text-left">
                 <Label
                   htmlFor="password"
                   className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
                 >
-                  {t.password}
+                  {t("auth.register.password")}
                 </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
+                  placeholder="••••••••"
+                  disabled={isLoading}
+                  {...register("password")}
+                />
               </div>
-              <Input
-                id="password"
-                type="password"
-                className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
-                placeholder="••••••••"
-                disabled={isLoading}
-                {...register("password")}
-              />
-              {errors.password && (
-                <p className="text-xs font-bold text-destructive ml-1">
-                  {errors.password.message}
-                </p>
-              )}
+              <div className="space-y-2 text-left">
+                <Label
+                  htmlFor="confirmPassword"
+                  className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
+                >
+                  {t("auth.register.confirm")}
+                </Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
+                  placeholder="••••••••"
+                  disabled={isLoading}
+                  {...register("confirmPassword")}
+                />
+              </div>
             </div>
+            {(errors.password || errors.confirmPassword) && (
+              <p className="text-xs font-bold text-destructive ml-1">
+                {errors.password?.message || errors.confirmPassword?.message}
+              </p>
+            )}
           </div>
 
           <Button
@@ -138,7 +174,7 @@ export default function LoginPage() {
             {isLoading ? (
               <Loader2 className="h-6 w-6 animate-spin" />
             ) : (
-              t.signIn
+              t("auth.register.signUp")
             )}
           </Button>
         </form>
@@ -149,7 +185,7 @@ export default function LoginPage() {
           </div>
           <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest">
             <span className="bg-background px-4 text-muted-foreground/50">
-              {t.social}
+              {t("auth.login.social")}
             </span>
           </div>
         </div>
@@ -188,12 +224,12 @@ export default function LoginPage() {
       </div>
 
       <div className="text-center text-xs font-black text-muted-foreground uppercase tracking-widest">
-        {t.noAccount}{" "}
+        {t("auth.register.hasAccount")}{" "}
         <Link
-          href="/register"
+          href="/login"
           className="text-primary hover:underline decoration-2 underline-offset-4"
         >
-          {t.signUp}
+          {t("auth.register.signIn")}
         </Link>
       </div>
     </div>

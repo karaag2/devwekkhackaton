@@ -20,11 +20,16 @@ import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useUIStore } from "@/store";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+
+import { DynamicHero } from "@/components/hero/dynamic-hero";
 
 export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
   const { visualStyle } = useUIStore();
+  const { t, i18n } = useTranslation();
   const router = useRouter();
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
@@ -56,29 +61,34 @@ export default function LandingPage() {
           </Link>
 
           <nav className="hidden lg:flex items-center gap-10">
-            {["Événement", "Parcours", "Récompenses", "FAQ"].map((item) => (
+            {[
+              { label: t("landing.nav.event"), href: "#event" },
+              { label: t("landing.nav.path"), href: "#path" },
+              { label: t("landing.nav.prizes"), href: "#prizes" },
+              { label: t("landing.nav.faq"), href: "#faq" },
+            ].map((item) => (
               <Link
-                key={item}
-                href={`#${item.toLowerCase()}`}
+                key={item.href}
+                href={item.href}
                 className="text-[13px] font-bold text-muted-foreground hover:text-primary transition-colors uppercase tracking-wider"
               >
-                {item}
+                {item.label}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 sm:gap-6">
             <Link href="/login" className="hidden sm:block">
               <Button
                 variant="ghost"
                 className="text-[13px] font-bold text-muted-foreground uppercase tracking-wider"
               >
-                Connexion
+                {t("auth.login.signIn")}
               </Button>
             </Link>
             <Link href="/register">
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg px-6 h-11 transition-all active:scale-95 shadow-xl shadow-primary/20 uppercase tracking-wider">
-                S'inscrire
+                {t("auth.login.signUp")}
               </Button>
             </Link>
           </div>
@@ -92,42 +102,19 @@ export default function LandingPage() {
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted border border-border mb-8 animate-in fade-in slide-in-from-top-4 duration-700">
               <div className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                Innovation Engineering Week
+                {t("landing.hero.badge")}
               </span>
             </div>
 
             <h1 className="text-6xl md:text-[7rem] font-black text-foreground tracking-[-0.05em] mb-12 leading-[0.9] animate-in fade-in slide-in-from-bottom-6 duration-1000">
-              {[
-                "cyber",
-                "midnight",
-                "mono",
-                "matrix",
-                "synthwave",
-                "blueprint",
-                "royal",
-              ].includes(visualStyle)
-                ? "Votre futur"
-                : "Votre futur"}{" "}
-              <br />
+              {t("landing.hero.title")} <br />
               <span className="text-primary">
-                {[
-                  "cyber",
-                  "midnight",
-                  "mono",
-                  "matrix",
-                  "synthwave",
-                  "blueprint",
-                  "royal",
-                ].includes(visualStyle)
-                  ? "commence ici"
-                  : "commence ici."}
+                {t("landing.hero.titleAccent")}
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-16 font-medium leading-relaxed animate-in fade-in duration-1000 delay-200">
-              Le plus grand hackathon étudiant pour repousser les limites de
-              l'IA, de la sécurité et du développement moderne et impacter la
-              communauté.
+              {t("landing.hero.subtitle")}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-in fade-in duration-1000 delay-300">
@@ -136,7 +123,7 @@ export default function LandingPage() {
                 className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-12 h-20 text-md font-black shadow-2xl shadow-primary/30 group uppercase tracking-widest"
                 onClick={() => router.push("/hackatonInscriptionForm")}
               >
-                Rejoindre la bataille
+                {t("landing.hero.ctaPrimary")}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
@@ -144,24 +131,17 @@ export default function LandingPage() {
                 variant="outline"
                 className="border-border bg-background/50 backdrop-blur-sm rounded-lg h-20 px-12 text-md font-black text-foreground hover:bg-muted transition-all uppercase tracking-widest"
               >
-                Le Programme
+                {t("landing.hero.ctaSecondary")}
               </Button>
             </div>
 
             <div className="relative mt-24 max-w-6xl mx-auto">
               <div className="aspect-video rounded-[3rem] bg-muted border border-border shadow-2xl overflow-hidden relative group">
-                <video
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="absolute inset-0 w-full h-full object-cover"
-                >
-                  <source src="/hero-video-v2.mp4" type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-primary/5 flex items-center justify-center">
-                  <div className="relative z-20 h-24 w-24 rounded-full bg-background/80 backdrop-blur-xl shadow-2xl border border-white/20 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform active:scale-95 group">
-                    <Play className="h-10 w-10 text-primary fill-current ml-1 group-hover:scale-110 transition-transform" />
+                <DynamicHero />
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-primary/5" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {/* Play button removed as it is now interactive canvas, or strictly visual */}
                   </div>
                 </div>
               </div>
@@ -180,7 +160,7 @@ export default function LandingPage() {
                   </div>
                   <div className="text-left">
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                      Pool de prix
+                      {t("landing.hero.prizePool")}
                     </p>
                     <p className="text-3xl font-black text-foreground mt-1 tracking-tighter">
                       $50,000
@@ -203,7 +183,7 @@ export default function LandingPage() {
                   <div className="flex items-center gap-4 text-foreground">
                     <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
                     <span className="text-sm font-black uppercase tracking-widest">
-                      Inscription Live
+                      {t("landing.hero.liveRegistration")}
                     </span>
                   </div>
                   <div className="flex -space-x-3 items-center">
@@ -233,10 +213,18 @@ export default function LandingPage() {
         <div className="py-20 border-y border-border mb-32 bg-muted/20 relative z-20">
           <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-12">
             {[
-              { icon: Users, title: "1000+", label: "Participants" },
-              { icon: Rocket, title: "30+", label: "Experts" },
-              { icon: Calendar, title: "48H", label: "Non-stop" },
-              { icon: Zap, title: "100+", label: "Projets" },
+              {
+                icon: Users,
+                title: "1000+",
+                label: t("landing.stats.participants"),
+              },
+              { icon: Rocket, title: "30+", label: t("landing.stats.experts") },
+              {
+                icon: Calendar,
+                title: "48H",
+                label: t("landing.stats.nonstop"),
+              },
+              { icon: Zap, title: "100+", label: t("landing.stats.projects") },
             ].map((stat, i) => (
               <div
                 key={i}
@@ -270,18 +258,17 @@ export default function LandingPage() {
                   variant="outline"
                   className="border-primary/30 text-primary px-5 py-2 rounded-full font-black uppercase tracking-[0.2em] text-[10px] bg-primary/5"
                 >
-                  Expertise Tracks
+                  {t("landing.tracks.badge")}
                 </Badge>
                 <h2 className="text-5xl md:text-8xl font-black text-foreground tracking-tighter leading-[0.85]">
-                  Forgez votre <br />{" "}
+                  {t("landing.tracks.title")} <br />{" "}
                   <span className="text-muted-foreground/40 italic">
-                    propre chemin.
+                    {t("landing.tracks.titleItalic")}
                   </span>
                 </h2>
               </div>
               <p className="text-xl text-muted-foreground font-semibold leading-relaxed max-w-lg">
-                Sélectionnez un parcours spécialisé. Défiez le statu quo
-                technologique avec des solutions audacieuses.
+                {t("landing.tracks.subtitle")}
               </p>
             </div>
 
@@ -289,20 +276,20 @@ export default function LandingPage() {
               {[
                 {
                   icon: Cpu,
-                  title: "Agentic Intelligence",
-                  desc: "Développez des systèmes autonomes de nouvelle génération.",
+                  title: t("landing.tracks.ai.title"),
+                  desc: t("landing.tracks.ai.desc"),
                   theme: "primary",
                 },
                 {
                   icon: ShieldCheck,
-                  title: "Offensive Security",
-                  desc: "Testez les limites et protégez les données critiques.",
+                  title: t("landing.tracks.sec.title"),
+                  desc: t("landing.tracks.sec.desc"),
                   theme: "primary",
                 },
                 {
                   icon: Zap,
-                  title: "Interface Experience",
-                  desc: "Réinventez la façon dont nous interagissons avec le code.",
+                  title: t("landing.tracks.ux.title"),
+                  desc: t("landing.tracks.ux.desc"),
                   theme: "primary",
                 },
               ].map((track, i) => (
@@ -328,7 +315,7 @@ export default function LandingPage() {
                     </div>
                   </div>
                   <div className="mt-12 flex items-center gap-3 text-sm font-black cursor-pointer group-hover:gap-6 transition-all text-primary uppercase tracking-[0.2em] relative z-10">
-                    <span>Explorer</span>
+                    <span>{t("landing.tracks.explore")}</span>
                     <ArrowRight className="h-5 w-5" />
                   </div>
                 </div>
@@ -349,8 +336,10 @@ export default function LandingPage() {
             />
             <div className="relative z-10 space-y-16">
               <h2 className="text-6xl md:text-[8rem] font-black text-background tracking-[-0.05em] leading-none uppercase">
-                Prêt à <br />{" "}
-                <span className="text-muted-foreground/50">créer?</span>
+                {t("landing.cta.title")} <br />{" "}
+                <span className="text-muted-foreground/50">
+                  {t("landing.cta.titleAccent")}
+                </span>
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
                 <Link href="/register">
@@ -358,14 +347,14 @@ export default function LandingPage() {
                     className="bg-background text-foreground hover:bg-muted rounded-xl px-16 h-24 text-xl font-black transition-all active:scale-95 uppercase tracking-widest shadow-2xl"
                     style={{ borderRadius: "calc(var(--radius) / 2)" }}
                   >
-                    Réclamez votre place
+                    {t("landing.cta.button")}
                   </Button>
                 </Link>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
                 <p className="text-muted-foreground text-xs font-black uppercase tracking-[0.5em]">
-                  Places limitées. Inscription ouverte.
+                  {t("landing.cta.limited")}
                 </p>
               </div>
             </div>
@@ -384,8 +373,7 @@ export default function LandingPage() {
               </span>
             </Link>
             <p className="text-muted-foreground max-w-sm font-bold text-xl leading-relaxed">
-              La plateforme d'innovation par excellence pour les bâtisseurs de
-              demain.
+              {t("landing.footer.description")}
             </p>
             <div className="flex gap-10">
               {["Twitter", "GitHub", "Discord"].map((social) => (
@@ -400,7 +388,7 @@ export default function LandingPage() {
           </div>
           <div className="space-y-10 font-black">
             <h5 className="text-[11px] uppercase tracking-[0.5em] text-muted-foreground/40">
-              Navigation
+              {t("landing.footer.navigation")}
             </h5>
             <ul className="space-y-6 text-lg">
               <li>
@@ -422,7 +410,7 @@ export default function LandingPage() {
           </div>
           <div className="space-y-10 font-black">
             <h5 className="text-[11px] uppercase tracking-[0.5em] text-muted-foreground/40">
-              Légal
+              {t("landing.footer.legal")}
             </h5>
             <ul className="space-y-6 text-lg">
               <li>
@@ -440,10 +428,11 @@ export default function LandingPage() {
         </div>
         <div className="container mx-auto px-6 lg:px-12 pt-24 mt-24 border-t border-border text-center flex justify-between">
           <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.6em]">
-            © 2026 DEVWEEK. ALL RIGHTS RESERVED.
+            {t("landing.footer.rights")}
           </p>
           <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.6em]">
-            Made with ❤️ by <a href="https://github.com/karaag2">Amos Issa</a> &{" "}
+            {t("landing.footer.madeBy")}{" "}
+            <a href="https://github.com/karaag2">Amos Issa</a> &{" "}
             <a href="https://github.com/nazir">Nazir</a>
           </p>
         </div>

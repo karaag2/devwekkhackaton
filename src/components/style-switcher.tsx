@@ -60,7 +60,7 @@ export function StyleSwitcher() {
         <DropdownMenuTrigger asChild>
           <Button
             size="icon"
-            className="h-14 w-14 rounded-full shadow-2xl bg-white text-gray-900 hover:bg-gray-50 border border-gray-200 transition-all hover:scale-110 active:scale-95 group"
+            className="h-14 w-14 rounded-full shadow-2xl bg-background text-foreground hover:bg-muted border border-border transition-all hover:scale-110 active:scale-95 group"
           >
             <Palette className="h-6 w-6 group-hover:rotate-12 transition-transform" />
           </Button>
