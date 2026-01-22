@@ -95,17 +95,29 @@ export default function LandingPage() {
               </span>
             </div>
 
-            <h1 className="text-6xl md:text-[7rem] font-black text-foreground tracking-[ -0.05em] mb-12 leading-[0.9] animate-in fade-in slide-in-from-bottom-6 duration-1000">
-              {visualStyle === "cyber" ||
-              visualStyle === "midnight" ||
-              visualStyle === "mono"
+            <h1 className="text-6xl md:text-[7rem] font-black text-foreground tracking-[-0.05em] mb-12 leading-[0.9] animate-in fade-in slide-in-from-bottom-6 duration-1000">
+              {[
+                "cyber",
+                "midnight",
+                "mono",
+                "matrix",
+                "synthwave",
+                "blueprint",
+                "royal",
+              ].includes(visualStyle)
                 ? "DECODE THE FUTURE"
                 : "L'ingénierie du"}{" "}
               <br />
               <span className="text-primary">
-                {visualStyle === "cyber" ||
-                visualStyle === "midnight" ||
-                visualStyle === "mono"
+                {[
+                  "cyber",
+                  "midnight",
+                  "mono",
+                  "matrix",
+                  "synthwave",
+                  "blueprint",
+                  "royal",
+                ].includes(visualStyle)
                   ? "SYSTEM_REBOOT"
                   : "futur commence ici."}
               </span>
@@ -135,6 +147,15 @@ export default function LandingPage() {
 
             <div className="relative mt-24 max-w-6xl mx-auto">
               <div className="aspect-video rounded-[3rem] bg-muted border border-border shadow-2xl overflow-hidden relative group">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover"
+                >
+                  <source src="/hero-video.mp4" type="video/mp4" />
+                </video>
                 <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-primary/5 flex items-center justify-center">
                   <div className="relative z-20 h-24 w-24 rounded-full bg-background/80 backdrop-blur-xl shadow-2xl border border-white/20 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform active:scale-95 group">
                     <Play className="h-10 w-10 text-primary fill-current ml-1 group-hover:scale-110 transition-transform" />
