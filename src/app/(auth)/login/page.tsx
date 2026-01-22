@@ -14,10 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { signIn } from "@/lib/auth-client";
+import { useUIStore } from "@/store";
+import { translations } from "@/lib/translations";
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const { language } = useUIStore();
+  const t = translations[language].auth.login;
 
   const {
     register,
@@ -38,16 +42,16 @@ export default function LoginPage() {
         },
         {
           onError: (ctx) => {
-            toast.error(ctx.error.message || "Échec de la connexion");
+            toast.error(ctx.error.message || "Error");
           },
           onSuccess: () => {
-            toast.success("Connexion réussie");
+            toast.success("Welcome back!");
             router.push("/dashboard");
           },
         },
       );
     } catch {
-      toast.error("Une erreur inattendue est survenue");
+      toast.error("Unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +65,7 @@ export default function LoginPage() {
         callbackURL: "/dashboard",
       });
     } catch {
-      toast.error(`Échec de la connexion avec ${provider}`);
+      toast.error(`Login failed with ${provider}`);
       setIsLoading(false);
     }
   }
@@ -69,11 +73,11 @@ export default function LoginPage() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-2 text-left">
-        <h1 className="text-4xl font-black tracking-tight text-foreground transition-colors">
-          Bon retour
+        <h1 className="text-4xl font-black tracking-tight text-foreground transition-colors uppercase">
+          {t.title}
         </h1>
-        <p className="text-lg font-medium text-muted-foreground">
-          Saisissez vos identifiants pour accéder à la grille.
+        <p className="text-lg font-medium text-muted-foreground italic">
+          {t.subtitle}
         </p>
       </div>
 
@@ -83,20 +87,20 @@ export default function LoginPage() {
             <div className="space-y-2 text-left">
               <Label
                 htmlFor="email"
-                className="text-sm font-bold text-foreground"
+                className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
               >
-                Adresse E-mail
+                {t.email}
               </Label>
               <Input
                 id="email"
                 placeholder="nom@exemple.com"
                 type="email"
-                className="h-12 rounded-xl border-border bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
+                className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
                 disabled={isLoading}
                 {...register("email")}
               />
               {errors.email && (
-                <p className="text-xs font-medium text-destructive">
+                <p className="text-xs font-bold text-destructive ml-1">
                   {errors.email.message}
                 </p>
               )}
@@ -105,26 +109,21 @@ export default function LoginPage() {
               <div className="flex items-center justify-between">
                 <Label
                   htmlFor="password"
-                  className="text-sm font-bold text-foreground"
+                  className="text-xs font-black uppercase tracking-widest text-foreground ml-1"
                 >
-                  Mot de passe
+                  {t.password}
                 </Label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm font-bold text-primary hover:underline"
-                >
-                  Mot de passe oublié ?
-                </Link>
               </div>
               <Input
                 id="password"
                 type="password"
-                className="h-12 rounded-xl border-border bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
+                className="h-14 rounded-2xl border-none bg-muted/30 transition-all focus:bg-background focus:ring-2 focus:ring-primary/20 text-lg font-bold"
+                placeholder="••••••••"
                 disabled={isLoading}
                 {...register("password")}
               />
               {errors.password && (
-                <p className="text-xs font-medium text-destructive">
+                <p className="text-xs font-bold text-destructive ml-1">
                   {errors.password.message}
                 </p>
               )}
@@ -133,13 +132,13 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="h-14 w-full rounded-xl bg-primary font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-xl active:scale-[0.98] uppercase tracking-widest text-xs"
+            className="h-14 w-full rounded-2xl bg-primary font-black text-primary-foreground shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:shadow-2xl active:scale-[0.98] uppercase tracking-widest"
             disabled={isLoading}
           >
             {isLoading ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              <Loader2 className="h-6 w-6 animate-spin" />
             ) : (
-              "Se connecter"
+              t.signIn
             )}
           </Button>
         </form>
@@ -148,9 +147,9 @@ export default function LoginPage() {
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t border-border" />
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-4 text-muted-foreground font-medium">
-              Ou continuer avec
+          <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest">
+            <span className="bg-background px-4 text-muted-foreground/50">
+              {t.social}
             </span>
           </div>
         </div>
@@ -158,7 +157,7 @@ export default function LoginPage() {
         <div className="grid grid-cols-1 gap-4">
           <Button
             variant="outline"
-            className="h-12 rounded-xl border-border font-bold text-foreground transition-all hover:bg-muted hover:border-muted-foreground/30 bg-background"
+            className="h-14 rounded-2xl border-border font-black text-foreground transition-all hover:bg-muted bg-background uppercase tracking-widest text-xs"
             onClick={() => handleSocialLogin("google")}
             disabled={isLoading}
           >
@@ -168,7 +167,7 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-4">
             <Button
               variant="outline"
-              className="h-12 rounded-xl border-border font-bold text-foreground transition-all hover:bg-muted bg-background"
+              className="h-14 rounded-2xl border-border font-black text-foreground transition-all hover:bg-muted bg-background uppercase tracking-widest text-[10px]"
               onClick={() => handleSocialLogin("github")}
               disabled={isLoading}
             >
@@ -177,7 +176,7 @@ export default function LoginPage() {
             </Button>
             <Button
               variant="outline"
-              className="h-12 rounded-xl border-border font-bold text-foreground transition-all hover:bg-muted bg-background"
+              className="h-14 rounded-2xl border-border font-black text-foreground transition-all hover:bg-muted bg-background uppercase tracking-widest text-[10px]"
               onClick={() => handleSocialLogin("gitlab")}
               disabled={isLoading}
             >
@@ -188,13 +187,13 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="text-center text-sm font-medium text-muted-foreground font-bold">
-        Pas encore membre ?{" "}
+      <div className="text-center text-xs font-black text-muted-foreground uppercase tracking-widest">
+        {t.noAccount}{" "}
         <Link
           href="/register"
-          className="font-black text-primary hover:underline"
+          className="text-primary hover:underline decoration-2 underline-offset-4"
         >
-          Créer un compte
+          {t.signUp}
         </Link>
       </div>
     </div>

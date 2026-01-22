@@ -146,6 +146,7 @@ interface UIState {
     | "royal"
     | "matrix"
     | "brutalist";
+  language: "fr" | "en" | "es";
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
   toggleWorkspaceFullScreen: () => void;
@@ -168,6 +169,7 @@ interface UIState {
       | "matrix"
       | "brutalist",
   ) => void;
+  setLanguage: (lang: "fr" | "en" | "es") => void;
 }
 
 export const useUIStore = create<UIState>()(
@@ -177,6 +179,7 @@ export const useUIStore = create<UIState>()(
       workspaceFullScreen: false,
       theme: "system",
       visualStyle: "minimal",
+      language: "fr",
       toggleSidebar: () =>
         set((state) => ({ sidebarOpen: !state.sidebarOpen })),
       setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
@@ -186,6 +189,7 @@ export const useUIStore = create<UIState>()(
         set({ workspaceFullScreen }),
       setTheme: (theme) => set({ theme }),
       setVisualStyle: (visualStyle) => set({ visualStyle }),
+      setLanguage: (language) => set({ language }),
     }),
     { name: "ui-storage" },
   ),

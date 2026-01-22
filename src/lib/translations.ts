@@ -1,0 +1,118 @@
+export const translations = {
+  fr: {
+    auth: {
+      login: {
+        title: "Connexion",
+        subtitle: "Bon retour parmi nous !",
+        email: "Adresse E-mail",
+        password: "Mot de passe",
+        signIn: "Se connecter",
+        noAccount: "Pas encore de compte ?",
+        signUp: "S'inscrire",
+        social: "Ou continuer avec",
+      },
+      register: {
+        title: "Rejoindre DevWeek 2026",
+        subtitle: "Devenez un bâtisseur du futur.",
+        name: "Nom complet",
+        email: "Adresse E-mail",
+        password: "Mot de passe",
+        confirm: "Confirmation",
+        signUp: "Créer mon compte",
+        hasAccount: "Déjà inscrit ?",
+        signIn: "Se connecter",
+      },
+      enrollment: {
+        title: "Rejoindre la Bataille",
+        subtitle: "Inscrivez-vous pour marquer l'histoire.",
+        step1: "Compte",
+        step2: "Profil Tech",
+        step3: "Mission",
+      },
+    },
+    common: {
+      loading: "Chargement...",
+      back: "Retour",
+      next: "Suivant",
+      finish: "Lancer l'assaut",
+    },
+  },
+  en: {
+    auth: {
+      login: {
+        title: "Sign In",
+        subtitle: "Welcome back!",
+        email: "Email Address",
+        password: "Password",
+        signIn: "Sign In",
+        noAccount: "Don't have an account?",
+        signUp: "Sign Up",
+        social: "Or continue with",
+      },
+      register: {
+        title: "Join DevWeek 2026",
+        subtitle: "Become a builder of the future.",
+        name: "Full Name",
+        email: "Email Address",
+        password: "Password",
+        confirm: "Confirm",
+        signUp: "Create Account",
+        hasAccount: "Already registered?",
+        signIn: "Sign In",
+      },
+      enrollment: {
+        title: "Join the Battle",
+        subtitle: "Register to make history.",
+        step1: "Account",
+        step2: "Tech Profile",
+        step3: "Mission",
+      },
+    },
+    common: {
+      loading: "Loading...",
+      back: "Back",
+      next: "Next",
+      finish: "Launch Assault",
+    },
+  },
+  es: {
+    auth: {
+      login: {
+        title: "Iniciar Sesión",
+        subtitle: "¡Bienvenido de nuevo!",
+        email: "Correo Electrónico",
+        password: "Contraseña",
+        signIn: "Entrar",
+        noAccount: "¿No tienes una cuenta?",
+        signUp: "Registrarse",
+        social: "O continuar con",
+      },
+      register: {
+        title: "Unirse a DevWeek 2026",
+        subtitle: "Hazte constructor del futuro.",
+        name: "Nombre Completo",
+        email: "Correo Electrónico",
+        password: "Contraseña",
+        confirm: "Confirmar",
+        signUp: "Crear Cuenta",
+        hasAccount: "¿Ya estás registrado?",
+        signIn: "Iniciar Sesión",
+      },
+      enrollment: {
+        title: "Únete a la Batalla",
+        subtitle: "Regístrate para hacer historia.",
+        step1: "Cuenta",
+        step2: "Perfil Tech",
+        step3: "Misión",
+      },
+    },
+    common: {
+      loading: "Cargando...",
+      back: "Atrás",
+      next: "Siguiente",
+      finish: "Lanzar Ataque",
+    },
+  },
+};
+
+export type Language = keyof typeof translations;
