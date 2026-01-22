@@ -19,11 +19,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect } from "react";
 import { useUIStore } from "@/store";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
   const [scrollY, setScrollY] = useState(0);
   const { visualStyle } = useUIStore();
-
+  const router = useRouter();
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll);
@@ -105,8 +106,8 @@ export default function LandingPage() {
                 "blueprint",
                 "royal",
               ].includes(visualStyle)
-                ? "DECODE THE FUTURE"
-                : "L'ingénierie du"}{" "}
+                ? "Votre futur"
+                : "Votre futur"}{" "}
               <br />
               <span className="text-primary">
                 {[
@@ -118,22 +119,24 @@ export default function LandingPage() {
                   "blueprint",
                   "royal",
                 ].includes(visualStyle)
-                  ? "SYSTEM_REBOOT"
-                  : "futur commence ici."}
+                  ? "commence ici"
+                  : "commence ici."}
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-16 font-medium leading-relaxed animate-in fade-in duration-1000 delay-200">
               Le plus grand hackathon étudiant pour repousser les limites de
-              l'IA, de la sécurité et du développement moderne.
+              l'IA, de la sécurité et du développement moderne et impacter la
+              communauté.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-in fade-in duration-1000 delay-300">
               <Button
                 size="lg"
                 className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-12 h-20 text-md font-black shadow-2xl shadow-primary/30 group uppercase tracking-widest"
+                onClick={() => router.push("/hackatonInscriptionForm")}
               >
-                Rejoindre la grille
+                Rejoindre la bataille
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
@@ -154,7 +157,7 @@ export default function LandingPage() {
                   playsInline
                   className="absolute inset-0 w-full h-full object-cover"
                 >
-                  <source src="/hero-video.mp4" type="video/mp4" />
+                  <source src="/hero-video-v2.mp4" type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-primary/5 flex items-center justify-center">
                   <div className="relative z-20 h-24 w-24 rounded-full bg-background/80 backdrop-blur-xl shadow-2xl border border-white/20 flex items-center justify-center cursor-pointer hover:scale-110 transition-transform active:scale-95 group">
@@ -165,7 +168,7 @@ export default function LandingPage() {
 
               {/* ILLUSTRATIVE FLOATING CARDS */}
               <div
-                className="absolute -top-16 -left-16 floating-card p-8 rounded-3xl hidden xl:block min-w-[280px]"
+                className="absolute -top-16 -left-16 floating-card p-8 rounded-3xl hidden xl:block min-w-[280px] bg-float-card"
                 style={{
                   transform: `translateY(${scrollY * -0.07}px)`,
                   borderRadius: "var(--radius)",
@@ -190,7 +193,7 @@ export default function LandingPage() {
               </div>
 
               <div
-                className="absolute -bottom-12 -right-12 floating-card p-6 rounded-3xl hidden xl:block shadow-2xl"
+                className="absolute -bottom-12 -right-12 floating-card p-6 rounded-3xl hidden xl:block shadow-2xl bg-float-card"
                 style={{
                   transform: `translateY(${scrollY * 0.12}px)`,
                   borderRadius: "var(--radius)",
@@ -346,8 +349,8 @@ export default function LandingPage() {
             />
             <div className="relative z-10 space-y-16">
               <h2 className="text-6xl md:text-[8rem] font-black text-background tracking-[-0.05em] leading-none uppercase">
-                Ready to <br />{" "}
-                <span className="text-muted-foreground/50">execute?</span>
+                Prêt à <br />{" "}
+                <span className="text-muted-foreground/50">créer?</span>
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
                 <Link href="/register">
@@ -355,14 +358,14 @@ export default function LandingPage() {
                     className="bg-background text-foreground hover:bg-muted rounded-xl px-16 h-24 text-xl font-black transition-all active:scale-95 uppercase tracking-widest shadow-2xl"
                     style={{ borderRadius: "calc(var(--radius) / 2)" }}
                   >
-                    Claim your spot
+                    Réclamez votre place
                   </Button>
                 </Link>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
                 <p className="text-muted-foreground text-xs font-black uppercase tracking-[0.5em]">
-                  Limited capacity. Registration open.
+                  Places limitées. Inscription ouverte.
                 </p>
               </div>
             </div>
@@ -435,9 +438,13 @@ export default function LandingPage() {
             </ul>
           </div>
         </div>
-        <div className="container mx-auto px-6 lg:px-12 pt-24 mt-24 border-t border-border text-center">
+        <div className="container mx-auto px-6 lg:px-12 pt-24 mt-24 border-t border-border text-center flex justify-between">
           <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.6em]">
             © 2026 DEVWEEK. ALL RIGHTS RESERVED.
+          </p>
+          <p className="text-[10px] font-black text-muted-foreground/50 uppercase tracking-[0.6em]">
+            Made with ❤️ by <a href="https://github.com/karaag2">Amos Issa</a> &{" "}
+            <a href="https://github.com/nazir">Nazir</a>
           </p>
         </div>
       </footer>

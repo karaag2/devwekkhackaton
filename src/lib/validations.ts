@@ -142,3 +142,35 @@ export type TicketInput = z.infer<typeof ticketSchema>;
 export type ResourceInput = z.infer<typeof resourceSchema>;
 export type WorkshopInput = z.infer<typeof workshopSchema>;
 export type AnnouncementInput = z.infer<typeof announcementSchema>;
+
+export const hackathonInscriptionSchema = z
+  .object({
+    // Step 1: Account
+    name: z.string().min(2, "Le nom est requis"),
+    email: z.string().email("Email invalide"),
+    password: z.string().min(8, "8 caractères minimum"),
+    confirmPassword: z.string(),
+    // Step 2: Tech
+    role: z.enum([
+      "FRONTEND",
+      "BACKEND",
+      "FULLSTACK",
+      "MOBILE",
+      "AI",
+      "DESIGN",
+    ]),
+    level: z.enum(["BEGINNER", "INTERMEDIATE", "ADVANCED"]),
+    github: z.string().url("URL GitHub invalide").optional().or(z.literal("")),
+    // Step 3: Motivation
+    motivation: z.string().min(20, "Dites-nous en un peu plus (20 car. min)"),
+    hasTeam: z.boolean().default(false),
+    teamName: z.string().optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confirmPassword"],
+  });
+
+export type HackathonInscriptionInput = z.infer<
+  typeof hackathonInscriptionSchema
+>;

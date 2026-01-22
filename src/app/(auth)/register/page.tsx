@@ -70,8 +70,8 @@ export default function RegisterPage() {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="space-y-2 text-left">
-        <h1 className="text-4xl font-black tracking-tight text-foreground transition-colors">
-          Rejoindre DevWeek
+        <h1 className="text-[1.603999999rem] font-black tracking-tight text-foreground transition-colors">
+          Rejoindre le hackaton DevWeek 2026
         </h1>
         <p className="text-lg font-medium text-muted-foreground">
           Devenez un bâtisseur de la future génération numérique.

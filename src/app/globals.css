@@ -15,6 +15,7 @@
   --color-card-foreground: var(--app-fg);
   --color-accent: var(--app-accent);
   --radius-lg: var(--app-radius);
+  --color-float-card: var(--app-float-card);
 
   --color-sidebar: var(--app-sidebar-bg);
   --color-sidebar-foreground: var(--app-sidebar-fg);
@@ -37,6 +38,7 @@
   --app-sidebar-bg: #fcfcfc;
   --app-sidebar-fg: #1a1a1a;
   --app-sidebar-border: #e2e8f0;
+  --app-float-card: #ffffff;
   color-scheme: light;
 }
 
@@ -53,6 +55,7 @@
   --app-sidebar-bg: #020617;
   --app-sidebar-fg: #f8fafc;
   --app-sidebar-border: rgba(255, 255, 255, 0.1);
+  --app-float-card: #0f172a;
   color-scheme: dark;
 }
 
@@ -66,6 +69,7 @@
   --app-border: #ff00ff55;
   --app-card: #1a082d;
   --app-radius: 0.5rem;
+  --app-float-card: #1a082d;
   color-scheme: dark;
 }
 
@@ -79,6 +83,7 @@
   --app-border: #008f11;
   --app-card: #000000;
   --app-radius: 0px;
+  --app-float-card: #000000;
   color-scheme: dark;
 }
 
@@ -93,6 +98,7 @@
   --app-card: #ffffff;
   --app-radius: 0px;
   --app-accent: #ffff00;
+  --app-float-card: #ffffff;
   color-scheme: light;
 }
 
@@ -106,6 +112,7 @@
   --app-border: rgba(255, 255, 255, 0.3);
   --app-card: rgba(255, 255, 255, 0.05);
   --app-radius: 0px;
+  --app-float-card: rgba(255, 255, 255, 0.05);
   color-scheme: dark;
 }
 
@@ -116,6 +123,7 @@
   --app-fg: #2d2d2d;
   --app-primary: #ff6b6b;
   --app-border: #f0e6d2;
+  --app-float-card: #fffcf0;
 }
 [data-style="elegant"] {
   --app-radius: 0rem;
@@ -123,12 +131,14 @@
   --app-fg: #1a1a1a;
   --app-primary: #1a1a1a;
   --app-border: #d1d1d1;
+  --app-float-card: #fdfcfb;
 }
 [data-style="midnight"] {
   --app-bg: #0b011d;
   --app-fg: #f3f0ff;
   --app-primary: #8b5cf6;
   --app-border: #4c1d95;
+  --app-float-card: #0b011d;
   color-scheme: dark;
 }
 [data-style="nature"] {
@@ -136,18 +146,21 @@
   --app-fg: #14532d;
   --app-primary: #22c55e;
   --app-border: #bbf7d0;
+  --app-float-card: #f0fdf4;
 }
 [data-style="sunset"] {
   --app-bg: #fff7ed;
   --app-fg: #7c2d12;
   --app-primary: #f97316;
   --app-border: #fed7aa;
+  --app-float-card: #fff7ed;
 }
 [data-style="mono"] {
   --app-bg: #000000;
   --app-fg: #ffffff;
   --app-primary: #ffffff;
   --app-radius: 0px;
+  --app-float-card: #000000;
   color-scheme: dark;
 }
 [data-style="glass"] {
@@ -156,12 +169,14 @@
   --app-primary: #3b82f6;
   --app-border: rgba(255, 255, 255, 0.3);
   --app-radius: 1.5rem;
+  --app-float-card: #f8fafc;
 }
 [data-style="royal"] {
   --app-bg: #0a0a0a;
   --app-fg: #f5f5f5;
   --app-primary: #d4af37;
   --app-border: #333333;
+  --app-float-card: #0a0a0a;
   color-scheme: dark;
 }
 
@@ -180,7 +195,7 @@
   }
 
   .floating-card {
-    background: var(--app-card);
+    background: var(--app-float-card);
     border: 1px solid var(--app-border);
     border-radius: var(--app-radius);
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
