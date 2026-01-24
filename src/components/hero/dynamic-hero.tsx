@@ -345,21 +345,82 @@ function NatureFlow() {
   );
 }
 
+
+
+
 function SunsetVibes() {
   return (
-    <div className="w-full h-full bg-linear-to-b from-indigo-900 via-purple-800 to-orange-500 relative overflow-hidden flex items-end justify-center">
-      {/* Sun */}
-      <motion.div
-        className="w-64 h-64 rounded-full bg-linear-to-t from-yellow-300 to-orange-500 blur-md mb-[-80px]"
-        animate={{ y: [0, 10, 0] }}
+    <div className="w-full h-full bg-[#fffcf0] relative overflow-hidden flex items-center justify-center">
+      {/* 1. La source de chaleur (fixe mais pulsante) */}
+      <motion.div 
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute -top-20 -right-20 w-96 h-96 bg-orange-200 rounded-full blur-[100px]"
       />
-      {/* Ocean Reflections */}
-      <div className="absolute bottom-0 w-full h-24 bg-linear-to-t from-orange-400/50 to-transparent backdrop-blur-sm" />
+
+      {/* 2. Ligne d'horizon minimaliste (S'étire comme BlueprintTech) */}
+      <motion.div 
+        initial={{ width: "0%" }}
+        animate={{ width: "60%" }}
+        transition={{ duration: 2, ease: "easeOut" }}
+        className="absolute h-[1px] bg-linear-to-r from-transparent via-orange-400/40 to-transparent bottom-1/3"
+      />
+
+      {/* 3. Les Orbes de Réfraction (Mouvement diagonal visible) */}
+      {[...Array(3)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-orange-300/20 blur-xl"
+          style={{
+            width: 100 + i * 50,
+            height: 100 + i * 50,
+          }}
+          animate={{
+            x: i % 2 === 0 ? [-100, 100] : [100, -100],
+            y: i % 2 === 0 ? [-50, 50] : [50, -50],
+          }}
+          transition={{
+            duration: 10 + i * 2,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* 4. Le "Scan" de chaleur (Inspiré de ton MonoScan mais horizontal et doux) */}
+      <motion.div 
+        animate={{ x: ["-100%", "100%"] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 bg-linear-to-r from-transparent via-white/40 to-transparent skew-x-12"
+      />
+
+      {/* 5. Particules de lumière (Comme MidnightStars mais version "Poussière d'or") */}
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-orange-400/30 rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            opacity: [0, 1, 0],
+          }}
+          transition={{
+            duration: 3 + Math.random() * 3,
+            repeat: Infinity,
+            delay: Math.random() * 5,
+          }}
+        />
+      ))}
+
+      {/* Grain de finition */}
+      <div className="absolute inset-0 opacity-[0.2] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </div>
   );
 }
-
 function GlassPrism() {
   return (
     <div className="w-full h-full bg-slate-100 relative overflow-hidden flex items-center justify-center">

@@ -1,100 +1,58 @@
+import createMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
 import { betterFetch } from "@better-fetch/fetch";
 import { type Session } from "better-auth/types";
 import { NextResponse, type NextRequest } from "next/server";
 
-export default async function authMiddleware(request: NextRequest) {
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: request.nextUrl.origin,
-      headers: {
-        //get the cookie from the request
-        cookie: request.headers.get("cookie") || "",
+const intlMiddleware = createMiddleware(routing);
+
+export default async function middleware(request: NextRequest) {
+  // 1. Check for Auth
+   const { data: session } = await betterFetch<Session>(
+      "/api/auth/get-session",
+      {
+        baseURL: request.nextUrl.origin,
+        headers: {
+          cookie: request.headers.get("cookie") || "",
+        },
       },
-    },
-  );
+    );
 
   const pathname = request.nextUrl.pathname;
 
-  // Protect dashboard and other private routes
-  if (
-    !session &&
-    (pathname.startsWith("/dashboard") ||
-      pathname.startsWith("/workspace") ||
-      pathname.startsWith("/admin") ||
-      pathname.startsWith("/mentor") ||
-      pathname.startsWith("/judge"))
-  ) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  // Regex to strip locale
+  // Matches /fr/..., /en/..., /es/... or just /fr
+  const localePattern = /^\/(?:fr|en|es)/;
+  const pathWithoutLocale = pathname.replace(localePattern, '') || '/';
+
+  const isProtectedRoute =
+       pathWithoutLocale.startsWith("/dashboard") ||
+       pathWithoutLocale.startsWith("/workspace") ||
+       pathWithoutLocale.startsWith("/admin") ||
+       pathWithoutLocale.startsWith("/mentor") ||
+       pathWithoutLocale.startsWith("/judge");
+
+  const isAuthPage =
+      pathWithoutLocale.startsWith("/login") ||
+      pathWithoutLocale.startsWith("/register");
+
+  // Determine current locale to maintain it in redirects
+  const localeMatch = pathname.match(localePattern);
+  const currentLocale = localeMatch ? localeMatch[0].replace('/', '') : routing.defaultLocale;
+
+  if (!session && isProtectedRoute) {
+       return NextResponse.redirect(new URL(`/${currentLocale}/login`, request.url));
   }
 
-  // Redirect authenticated users away from auth pages
-  if (
-    session &&
-    (pathname.startsWith("/login") || pathname.startsWith("/register"))
-  ) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  if (session && isAuthPage) {
+      return NextResponse.redirect(new URL(`/${currentLocale}/dashboard`, request.url));
   }
 
-  return NextResponse.next();
+  // 2. Run next-intl middleware
+  return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/workspace/:path*",
-    "/admin/:path*",
-    "/mentor/:path*",
-    "/judge/:path*",
-    "/login",
-    "/register",
-  ],
+  // Match only internationalized pathnames
+  matcher: ['/', '/(fr|en|es)/:path*']
 };
-// import { NextRequest, NextResponse } from "next/server";
-// import { auth } from "@/lib/auth";
-
-// export default async function authMiddleware(request: NextRequest) {
-//   const session = await auth.api.getSession({
-//     headers: request.headers,
-//   });
-
-//   const pathname = request.nextUrl.pathname;
-
-//   // Routes protégées
-//   const protectedRoutes = [
-//     "/dashboard",
-//     "/workspace",
-//     "/admin",
-//     "/mentor",
-//     "/judge",
-//   ];
-
-//   const isProtected = protectedRoutes.some((route) =>
-//     pathname.startsWith(route)
-//   );
-
-//   if (!session && isProtected) {
-//     return NextResponse.redirect(new URL("/login", request.url));
-//   }
-
-//   // Empêcher un user connecté d'accéder à login/register
-//   if (
-//     session &&
-//     (pathname.startsWith("/login") || pathname.startsWith("/register"))
-//   ) {
-//     return NextResponse.redirect(new URL("/dashboard", request.url));
-//   }
-
-//   return NextResponse.next();
-// }
-// export const config = {
-//   matcher: [
-//     "/dashboard/:path*",
-//     "/workspace/:path*",
-//     "/admin/:path*",
-//     "/mentor/:path*",
-//     "/judge/:path*",
-//     "/login",
-//     "/register",
-//   ],
-// };

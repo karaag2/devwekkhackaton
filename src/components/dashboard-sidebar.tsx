@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,14 +9,14 @@ import { Menu } from "lucide-react";
 import { NAV_ITEMS, type UserRole } from "@/types";
 import { useState } from "react";
 import { useUserStore, useUIStore } from "@/store";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const user = useUserStore((state) => state.user);
   const { sidebarOpen } = useUIStore();
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   const translateLabel = (label: string) => {
     const map: Record<string, string> = {

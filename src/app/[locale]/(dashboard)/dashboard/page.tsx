@@ -3,11 +3,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserStore } from "@/store";
 import { Calendar, Users, Trophy } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 export default function DashboardPage() {
   const user = useUserStore((state) => state.user);
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="flex flex-col gap-10 max-w-6xl mx-auto py-4">

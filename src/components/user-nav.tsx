@@ -14,16 +14,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useUserStore } from "@/store";
 import { signOut } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useEffect } from "react";
 import { useSession } from "@/lib/auth-client";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 export function UserNav() {
   const router = useRouter();
   const { data: session } = useSession();
   const setUser = useUserStore((state) => state.setUser);
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   useEffect(() => {
     if (session?.user) {

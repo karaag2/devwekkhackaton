@@ -1,6 +1,7 @@
 "use client";
 
-import { useTranslation } from "react-i18next";
+import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { Languages } from "lucide-react";
 import {
@@ -12,13 +13,19 @@ import {
 import { Button } from "@/components/ui/button";
 
 export function FloatingLanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const languages = [
     { code: "fr", label: "Français" },
     { code: "en", label: "English" },
     { code: "es", label: "Español" },
   ];
+
+  const handleLanguageChange = (nextLocale: string) => {
+    router.replace(pathname, { locale: nextLocale });
+  };
 
   return (
     <div className="fixed bottom-24 right-6 z-100">
@@ -39,10 +46,10 @@ export function FloatingLanguageSwitcher() {
           {languages.map((lang) => (
             <DropdownMenuItem
               key={lang.code}
-              onClick={() => i18n.changeLanguage(lang.code)}
+              onClick={() => handleLanguageChange(lang.code)}
               className={cn(
                 "rounded-xl px-4 py-2 text-xs font-black uppercase tracking-widest cursor-pointer transition-colors",
-                i18n.language === lang.code
+                locale === lang.code
                   ? "bg-indigo-600 text-white"
                   : "text-gray-500 hover:bg-gray-100",
               )}

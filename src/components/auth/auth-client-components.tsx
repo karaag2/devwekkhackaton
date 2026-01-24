@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useUIStore } from "@/store";
-import { useTranslation } from "react-i18next";
+import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
 const THEME_DATA = {
@@ -120,16 +121,19 @@ export function AuthIllustration() {
 }
 
 export function ShellLanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
   return (
     <div className="flex items-center gap-1 bg-muted rounded-full p-1 border border-border">
       {(["fr", "en", "es"] as const).map((lang) => (
         <button
           key={lang}
-          onClick={() => i18n.changeLanguage(lang)}
+          onClick={() => router.replace(pathname, { locale: lang })}
           className={cn(
             "px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full transition-all",
-            i18n.language === lang
+            locale === lang
               ? "bg-primary text-primary-foreground shadow-md"
               : "text-muted-foreground hover:bg-background",
           )}

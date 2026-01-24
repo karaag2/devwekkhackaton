@@ -1,40 +1,25 @@
-"use client";
-
+"use client"
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import {
   ArrowRight,
   Zap,
-  Play,
   Calendar,
   Users,
-  Trophy,
   Rocket,
   ShieldCheck,
   Cpu,
-  Clock,
-  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useState, useEffect } from "react";
-import { useUIStore } from "@/store";
-import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
-
+import { useTranslations } from "next-intl";
+import  TrophyCard  from "@/components/scroll-trophy";
 import { DynamicHero } from "@/components/hero/dynamic-hero";
 
-export default function LandingPage() {
-  const [scrollY, setScrollY] = useState(0);
-  const { visualStyle } = useUIStore();
-  const { t, i18n } = useTranslation();
-  const router = useRouter();
+import DynamicAuraGradiant from "@/components/hero-dynamic-aura-gradiant";
 
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+export default function LandingPage() {
+  const t = useTranslations();
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-500 overflow-x-hidden">
@@ -42,10 +27,7 @@ export default function LandingPage() {
       <div className="fixed inset-0 pointer-events-none z-0 bg-dot-grid opacity-30" />
 
       {/* Dynamic Aura Gradient */}
-      <div
-        className="fixed top-[-10%] right-[-5%] w-[60%] h-[60%] rounded-full bg-primary/10 blur-[120px] pointer-events-none z-0"
-        style={{ transform: `translateY(${scrollY * 0.1}px)` }}
-      />
+      <DynamicAuraGradiant />
 
       {/* Navigation */}
       <header className="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
@@ -118,14 +100,16 @@ export default function LandingPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 animate-in fade-in duration-1000 delay-300">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-12 h-20 text-md font-black shadow-2xl shadow-primary/30 group uppercase tracking-widest"
-                onClick={() => router.push("/hackatonInscriptionForm")}
-              >
-                {t("landing.hero.ctaPrimary")}
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href="/hackatonInscriptionForm">
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg px-12 h-20 text-md font-black shadow-2xl shadow-primary/30 group uppercase tracking-widest"
+                >
+                  {t("landing.hero.ctaPrimary")}
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+
               <Button
                 size="lg"
                 variant="outline"
@@ -138,39 +122,10 @@ export default function LandingPage() {
             <div className="relative mt-24 max-w-6xl mx-auto">
               <div className="aspect-video rounded-[3rem] bg-muted border border-border shadow-2xl overflow-hidden relative group">
                 <DynamicHero />
-                <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute inset-0 bg-linear-to-br from-primary/10 via-transparent to-primary/5" />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {/* Play button removed as it is now interactive canvas, or strictly visual */}
-                  </div>
-                </div>
               </div>
 
               {/* ILLUSTRATIVE FLOATING CARDS */}
-              <div
-                className="absolute -top-16 -left-16 floating-card p-8 rounded-3xl hidden xl:block min-w-[280px] bg-float-card"
-                style={{
-                  transform: `translateY(${scrollY * -0.07}px)`,
-                  borderRadius: "var(--radius)",
-                }}
-              >
-                <div className="flex items-center gap-5 mb-6">
-                  <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                    <Trophy className="h-7 w-7 text-primary" />
-                  </div>
-                  <div className="text-left">
-                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
-                      {t("landing.hero.prizePool")}
-                    </p>
-                    <p className="text-3xl font-black text-foreground mt-1 tracking-tighter">
-                      $50,000
-                    </p>
-                  </div>
-                </div>
-                <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-                  <div className="w-3/4 h-full bg-primary animate-pulse" />
-                </div>
-              </div>
+              <TrophyCard />
 
               <div
                 className="absolute -bottom-12 -right-12 floating-card p-6 rounded-3xl hidden xl:block shadow-2xl bg-float-card"
