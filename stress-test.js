@@ -1,48 +1,56 @@
 /**
- * LOAD TEST SCRIPT (Node.js)
- * Simulates concurrent users performing a sequence of actions.
+ * REAL-TIME STRESS TEST WITH ERROR IDENTIFICATION
+ * Target: Vercel + Render PostgreSQL
  */
 
-const BASE_URL = "https://agustin-jaillike-zander.ngrok-free.dev"; // Your Ngrok URL
-const CONCURRENT_USERS = 200;
-const DURATION_SECONDS = 30;
+const BASE_URL = "https://devweekhackaton.vercel.app"; 
+const CONCURRENT_USERS = 100; // Testing at the failure threshold
+const TEST_ID = Math.floor(Math.random() * 10000); 
+
+const errorCounts = {};
 
 async function simulateUser(id) {
-    const startTime = Date.now();
-    let stats = { success: 0, fail: 0, steps: [] };
+    let stats = { success: 0, fail: 0 };
+    const userEmail = `debug_stress_${TEST_ID}_${id}@example.com`;
+    const userName = `Debug User ${id}`;
 
     try {
-        // Step 1: Visit Landing Page
-        let start = Date.now();
-        await fetch(`${BASE_URL}/fr`);
-        stats.steps.push({ name: 'Landing', duration: Date.now() - start });
+        // Step 1: Landing Page (GET)
+        const resLanding = await fetch(`${BASE_URL}/fr`);
+        if (!resLanding.ok) throw new Error(`HTTP_${resLanding.status}_LANDING`);
         stats.success++;
 
-        // Step 2: Visit Login Page
-        start = Date.now();
-        await fetch(`${BASE_URL}/fr/login`);
-        stats.steps.push({ name: 'Login Page', duration: Date.now() - start });
-        stats.success++;
-
-        // Step 3: Attempt API Login (Simulate check-session or sign-up attempt)
-        // We hit the session endpoint which is frequently called by the middleware
-        start = Date.now();
-        const res = await fetch(`${BASE_URL}/api/auth/get-session`, {
-            headers: { 'Cookie': 'fake-session-cookie-for-test' }
+        // Step 2: Sign Up (POST) 
+        const resSignup = await fetch(`${BASE_URL}/api/auth/sign-up/email`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Origin': BASE_URL 
+            },
+            body: JSON.stringify({
+                email: userEmail,
+                password: "Password123!",
+                name: userName,
+                callbackURL: `${BASE_URL}/fr/dashboard`
+            })
         });
-        stats.steps.push({ name: 'Auth Check', duration: Date.now() - start });
         
-        if (res.status >= 500) throw new Error('Server Error');
+        if (!resSignup.ok) {
+            const signupBody = await resSignup.text();
+            // Group errors by status code + first 30 chars of message
+            const errorMsg = signupBody.substring(0, 40).replace(/\n/g, ' ');
+            throw new Error(`SIGNUP_${resSignup.status}_[${errorMsg}]`);
+        }
         stats.success++;
 
-        // Step 4: Visit Dashboard
-        start = Date.now();
-        await fetch(`${BASE_URL}/fr/dashboard`);
-        stats.steps.push({ name: 'Dashboard', duration: Date.now() - start });
+        // Step 3: Dashboard Access (GET)
+        const resDash = await fetch(`${BASE_URL}/fr/dashboard`);
+        if (!resDash.ok) throw new Error(`HTTP_${resDash.status}_DASHBOARD`);
         stats.success++;
 
     } catch (err) {
-        // console.error(`User ${id} failed:`, err.message);
+        const errorKey = err.message;
+        errorCounts[errorKey] = (errorCounts[errorKey] || 0) + 1;
         stats.fail++;
     }
 
@@ -50,44 +58,29 @@ async function simulateUser(id) {
 }
 
 async function runTest() {
-    console.log(`\n🚀 STARTING STRESS TEST ON: ${BASE_URL}`);
-    console.log(`👥 Concurrent Users: ${CONCURRENT_USERS}`);
-    console.log(`⏱️  Duration: ${DURATION_SECONDS}s\n`);
+    console.log(`\n� STARTING ERROR IDENTIFICATION SCAN...`);
+    console.log(`🌍 Target: ${BASE_URL}`);
+    console.log(`👥 Simulating ${CONCURRENT_USERS} concurrent signups...\n`);
 
-    const users = [];
-    const overallStats = { totalSuccess: 0, totalFail: 0, times: [] };
+    const batch = Array.from({ length: CONCURRENT_USERS }, (_, i) => simulateUser(i));
+    await Promise.all(batch);
 
-    // Run users in batches to reach concurrency
-    const startTime = Date.now();
+    console.log(`\n--- 📂 TOP ERROR CAUSES IDENTIFIED ---`);
+    const sortedErrors = Object.entries(errorCounts).sort((a, b) => b[1] - a[1]);
     
-    while ((Date.now() - startTime) < DURATION_SECONDS * 1000) {
-        const batch = Array.from({ length: CONCURRENT_USERS }, (_, i) => simulateUser(i));
-        const results = await Promise.all(batch);
-        
-        results.forEach(r => {
-            overallStats.totalSuccess += r.success;
-            overallStats.totalFail += r.fail;
-            r.steps.forEach(s => overallStats.times.push(s.duration));
-        });
-
-        // Small pause between batches to not instantly kill the process itself
-        await new Promise(r => setTimeout(r, 500));
-    }
-
-    const totalTime = (Date.now() - startTime) / 1000;
-    const avgTime = overallStats.times.reduce((a, b) => a + b, 0) / overallStats.times.length;
-
-    console.log(`\n--- 📊 TEST RESULTS ---`);
-    console.log(`✅ Total Successful Requests: ${overallStats.totalSuccess}`);
-    console.log(`❌ Total Failed Requests: ${overallStats.totalFail}`);
-    console.log(`⏲️  Average Response Time: ${avgTime.toFixed(2)}ms`);
-    console.log(`📈 Requests Per Second: ${(overallStats.totalSuccess / totalTime).toFixed(2)} req/s`);
-    console.log(`-----------------------\n`);
-
-    if (overallStats.totalFail > 0) {
-        console.log("⚠️  WARNING: Serious bottleneck detected. SQLite or Dev Server is failing.");
+    if (sortedErrors.length === 0) {
+        console.log("✅ PERFECT: No errors detected at this load.");
     } else {
-        console.log("💎 UNBELIEVABLE: It held up (for now).");
+        sortedErrors.forEach(([cause, count]) => {
+            console.log(`[x${count}] ${cause}`);
+        });
+    }
+    console.log(`---------------------------------------\n`);
+    
+    if (errorCounts["SIGNUP_500_[{\"code\":\"INTERNAL_SERVER_ERROR\"}]"] || 
+        JSON.stringify(errorCounts).includes("P2024") || 
+        JSON.stringify(errorCounts).includes("Too many connections")) {
+        console.log("� DIAGNOSIS: Your Database (Render) is saturated. It cannot handle this many parallel connections.");
     }
 }
 
