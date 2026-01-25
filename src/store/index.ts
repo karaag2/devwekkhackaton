@@ -9,6 +9,7 @@ interface User {
   name: string | null;
   role: string;
   image: string | null;
+  onboarded: boolean;
 }
 
 interface UserState {

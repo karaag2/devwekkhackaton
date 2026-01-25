@@ -84,8 +84,8 @@ export function AuthIllustration() {
   const themeInfo = THEME_DATA[visualStyle] || THEME_DATA.minimal;
 
   return (
-    <div className="relative flex-1 flex flex-col items-center justify-center bg-muted overflow-hidden">
-      <div className="absolute inset-0 bg-linear-to-br from-primary/20 via-transparent to-primary/5 transition-colors duration-700" />
+    <div className="relative flex-1 flex flex-col items-center justify-center bg-transparent overflow-hidden">
+      <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/5 transition-colors duration-700" />
 
       <div className="relative z-10 w-full max-w-xl p-12 animate-in fade-in zoom-in-95 duration-700">
         <div className="relative aspect-square w-full drop-shadow-2xl">

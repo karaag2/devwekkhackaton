@@ -1,0 +1,159 @@
+{
+  "landing": {
+    "nav": {
+      "event": "Event",
+      "path": "Tracks",
+      "prizes": "Prizes",
+      "faq": "FAQ"
+    },
+    "hero": {
+      "badge": "Now Open",
+      "title": "The future of tech in Niger",
+      "titleAccent": "is here.",
+      "subtitle": "The largest student hackathon to push the boundaries of AI, security, and modern development to impact the community.",
+      "ctaPrimary": "Join the Battle",
+      "ctaSecondary": "Schedule",
+      "prizePool": "Prize Pool",
+      "liveRegistration": "Live Registration"
+    },
+    "stats": {
+      "participants": "Participants",
+      "projects": "Projects",
+      "prizes": "Total Prizes",
+      "experts": "Experts",
+      "nonstop": "Non-stop"
+    },
+    "tracks": {
+      "badge": "Expertise Tracks",
+      "title": "Forge your",
+      "titleItalic": "own path.",
+      "subtitle": "Select a specialized track. Challenge the technological status quo with bold solutions.",
+      "ai": {
+        "title": "Agentic Intelligence",
+        "desc": "Build next-generation autonomous systems."
+      },
+      "sec": {
+        "title": "Offensive Security",
+        "desc": "Test the limits and protect critical data."
+      },
+      "ux": {
+        "title": "Interface Experience",
+        "desc": "Reimagine how we interact with code."
+      },
+      "explore": "Explore"
+    },
+    "cta": {
+      "title": "Ready to",
+      "titleAccent": "create?",
+      "button": "Claim your spot",
+      "limited": "Limited spots. Registration open."
+    },
+    "footer": {
+      "description": "The ultimate innovation platform for the builders of tomorrow.",
+      "navigation": "Navigation",
+      "legal": "Legal",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "rights": "© 2026 DEVWEEK. ALL RIGHTS RESERVED.",
+      "madeBy": "Made with ❤️ by"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Welcome back!",
+      "email": "Email Address",
+      "password": "Password",
+      "signIn": "Sign In",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign Up",
+      "social": "Or continue with"
+    },
+    "register": {
+      "title": "Join DevWeek 2026",
+      "subtitle": "Become a builder of the future.",
+      "name": "Full Name",
+      "email": "Email Address",
+      "password": "Password",
+      "confirm": "Confirm",
+      "phone": "Phone Number",
+      "city": "City",
+      "country": "Country",
+      "status": "Status",
+      "schoolOrCompany": "School / Company",
+      "role": "Primary Role",
+      "level": "Experience Level",
+      "skills": "Skills (comma separated)",
+      "trackInterest": "Track Interest",
+      "tshirtSize": "T-shirt Size",
+      "dietary": "Dietary Restrictions",
+      "bio": "Short Bio",
+      "motivation": "Motivation & Project",
+      "signUp": "Create Account",
+      "hasAccount": "Already registered?",
+      "signIn": "Sign In",
+      "hasTeam": "I already have a team (Code required later)",
+      "agreeToRules": "I agree to the Code of Conduct"
+    },
+    "enrollment": {
+      "title": "Join the Battle",
+      "subtitle": "Register to make history.",
+      "step1": "Identity",
+      "step2": "Tech Profile",
+      "step3": "Preferences",
+      "step4": "Validation"
+    }
+  },
+  "dashboard": {
+    "nav": {
+      "workspace": "Workspace",
+      "teams": "My Team",
+      "schedule": "Schedule",
+      "resources": "Resources",
+      "settings": "Settings",
+      "home": "Home",
+      "events": "Events",
+      "dashboard": "Dashboard",
+      "submissions": "Submissions",
+      "leaderboard": "Leaderboard",
+      "help": "Help",
+      "admin": "Admin",
+      "users": "Users",
+      "announcements": "Announcements",
+      "tickets": "Tickets",
+      "showcase": "Showcase"
+    },
+    "sidebar": {
+      "collapse": "Collapse sidebar",
+      "expand": "Expand sidebar"
+    },
+    "home": {
+      "welcome": "Welcome back,",
+      "overview": "Everything looks great today. Here's a quick overview of your status.",
+      "stats": {
+        "upcoming": "Upcoming Events",
+        "new": "+1 new",
+        "pending": "Pending",
+        "locked": "Locked",
+        "noTeam": "Not in a team"
+      }
+    },
+    "events": {
+      "title": "Hackathons",
+      "create": "Create Event",
+      "viewDetails": "View Details",
+      "online": "Online"
+    },
+    "userNav": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Log out"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Launch Assault"
+  }
+}

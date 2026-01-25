@@ -1,4 +1,5 @@
 "use client"
+import React from "react";
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import {
@@ -20,6 +21,13 @@ import DynamicAuraGradiant from "@/components/hero-dynamic-aura-gradiant";
 
 export default function LandingPage() {
   const t = useTranslations();
+  const [scrollY, setScrollY] = React.useState(0);
+
+  React.useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-500 overflow-x-hidden">

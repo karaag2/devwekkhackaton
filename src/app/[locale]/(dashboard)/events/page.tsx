@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,12 +12,12 @@ import {
 } from "@/components/ui/card";
 import { Plus, Calendar, MapPin } from "lucide-react";
 import { useUserStore } from "@/store";
-import { useTranslation } from "react-i18next";
+import { useTranslations } from "next-intl";
 
 export default function EventsPage() {
   const user = useUserStore((state) => state.user);
   const isAdmin = user?.role === "ORGANIZER";
-  const { t } = useTranslation();
+  const t = useTranslations();
 
   return (
     <div className="flex flex-col gap-8">

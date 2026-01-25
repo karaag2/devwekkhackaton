@@ -24,6 +24,22 @@ model User {
   gitlab        String?
   linkedin      String?
   website       String?
+  // Profile Details
+  phone         String?
+  city          String?
+  country       String?
+  status        String?   // STUDENT, PROFESSIONAL, OTHER
+  schoolOrCompany String?
+  portfolio     String?
+  
+  // Hackathon Specifics
+  trackInterest String?
+  tshirtSize    String?
+  dietaryRestrictions String?
+  motivation    String?
+  hasTeam       Boolean   @default(false)
+  agreeToRules  Boolean   @default(false)
+  onboarded     Boolean   @default(false) // Tracks if hackathon registration is complete
   
   // Skills & Profile
   skills        String?   // JSON array of skills
