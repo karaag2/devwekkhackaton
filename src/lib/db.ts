@@ -7,9 +7,11 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient() {
-  // Use the pg adapter for PostgreSQL
+  // IMPORTANT: In Serverless (Vercel), each function is a separate instance.
+  // Setting 'max: 1' ensures we don't hoard connections on Render.
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
+    max: 1, // Only 1 connection per Vercel instance
   });
   const adapter = new PrismaPg(pool);
   
