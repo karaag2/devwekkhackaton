@@ -39,7 +39,7 @@ export default function CreateEventPage() {
     watch,
     formState: { errors },
   } = useForm<CreateEventInput>({
-    resolver: zodResolver(createEventSchema),
+    resolver: zodResolver(createEventSchema) as any,
     defaultValues: {
       maxTeamSize: 4,
       minTeamSize: 1,

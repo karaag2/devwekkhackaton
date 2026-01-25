@@ -109,7 +109,7 @@ function JoinTeamDialog() {
     handleSubmit,
     formState: { errors },
   } = useForm<JoinTeamInput>({
-    resolver: zodResolver(joinTeamSchema),
+    resolver: zodResolver(joinTeamSchema) as any,
   });
 
   async function onSubmit(data: JoinTeamInput) {

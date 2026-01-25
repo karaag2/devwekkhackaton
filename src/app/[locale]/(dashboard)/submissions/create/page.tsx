@@ -40,7 +40,7 @@ export default function CreateSubmissionPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<SubmissionInput>({
-    resolver: zodResolver(submissionSchema),
+    resolver: zodResolver(submissionSchema) as any,
   });
 
   async function onSubmit(data: SubmissionInput) {

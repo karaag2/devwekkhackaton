@@ -29,7 +29,7 @@ export default function CreateTeamPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<CreateTeamInput>({
-    resolver: zodResolver(createTeamSchema),
+    resolver: zodResolver(createTeamSchema) as any,
   });
 
   async function onSubmit(data: CreateTeamInput) {

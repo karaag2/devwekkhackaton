@@ -70,7 +70,7 @@ export default function HackathonRegistration() {
     reset,
     formState: { errors },
   } = useForm<HackathonInscriptionInput>({
-    resolver: zodResolver(hackathonInscriptionSchema),
+    resolver: zodResolver(hackathonInscriptionSchema) as any,
     defaultValues: {
       hasTeam: false,
       agreeToRules: false,
