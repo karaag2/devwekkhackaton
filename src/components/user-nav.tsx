@@ -33,6 +33,7 @@ export function UserNav() {
         name: session.user.name,
         image: session.user.image || null,
         role: (session.user as any).role || "PARTICIPANT",
+        onboarded: (session.user as any).onboarded || false,
       });
     }
   }, [session, setUser]);
