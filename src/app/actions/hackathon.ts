@@ -41,7 +41,7 @@ export async function submitHackathonRegistration(data: HackathonInscriptionInpu
         hasTeam: validated.hasTeam,
         agreeToRules: validated.agreeToRules,
         onboarded: true,
-      },
+      } as any,
     });
 
     revalidatePath("/dashboard");
