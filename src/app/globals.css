@@ -226,3 +226,12 @@
   outline: 2px solid var(--app-primary);
   outline-offset: 2px;
 }
+
+/* WORKSPACE FULL SCREEEN */
+:root.workspace-full-screen .hide-in-full-screen {
+  display: none !important;
+}
+
+:root.workspace-full-screen .no-padding-in-full-screen {
+  padding: 0 !important;
+}
