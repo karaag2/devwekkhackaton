@@ -81,7 +81,7 @@ export const NAV_ITEMS = {
   PARTICIPANT: [
     { label: "Dashboard", href: "/dashboard" },
     { label: "My Team", href: "/team" },
-    { label: "Workspace", href: "/workspace" },
+    { label: "Workspace", href: "/workspace/default" },
     { label: "Submissions", href: "/submissions" },
     { label: "Leaderboard", href: "/leaderboard" },
     { label: "Help", href: "/support" },
