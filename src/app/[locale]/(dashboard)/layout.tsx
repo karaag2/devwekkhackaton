@@ -4,6 +4,7 @@ import { UserNav } from "@/components/user-nav";
 import { FullScreenSync } from "@/components/full-screen-sync";
 import { cn } from "@/lib/utils";
 import { DashboardLanguageSwitcher } from "@/components/dashboard-language-switcher";
+import { DashboardMobileNav } from "@/components/dashboard-mobile-nav";
 
 export default function DashboardLayout({
   children,
@@ -18,6 +19,7 @@ export default function DashboardLayout({
       </div>
       <div className="flex flex-col w-full">
         <header className="hide-in-full-screen sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background px-6 backdrop-blur-md">
+          <DashboardMobileNav />
           <SidebarToggle />
           <div className="ml-auto flex items-center gap-4">
             <DashboardLanguageSwitcher />
