@@ -21,6 +21,10 @@ export const auth = betterAuth({
       clientId: process.env.GITLAB_CLIENT_ID || "placeholder",
       clientSecret: process.env.GITLAB_CLIENT_SECRET || "placeholder",
     },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "placeholder",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "placeholder",
+    },
   },
   account: {
     accountLinking: {
